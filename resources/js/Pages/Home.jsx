@@ -2,14 +2,16 @@ import React from "react";
 import CustomNavbar from "@/Components/Navbar";
 import CustomFooter from "@/Components/Footer";
 import { Head } from "@inertiajs/react";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const Home = ({ auth }) => {
     return (
         <>
             <Head title="Home" />
-            <div className="min-h-screen flex flex-col">
-                <CustomNavbar user={auth.user} />
-                <main className="flex-grow">
+            <div className="min-h-screen flex flex-col relative">
+                <CustomNavbar user={auth.user} className="z-10" />
+                <main className="flex-grow -z-10">
                     <div className="mx-auto">
 
                     <section id="banner">
@@ -68,6 +70,8 @@ const Home = ({ auth }) => {
                             </h1>
                         </div>
 
+                        <div className="border-t-2 w-48 border-gray-100 m-4"></div>
+
 
                             <div className="flex justify-around space-x-8 mt-7">
                             <a
@@ -75,7 +79,7 @@ const Home = ({ auth }) => {
                                 className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                             >
                                 <img
-                                    src="https://rebellion.qodeinteractive.com/wp-content/uploads/2016/09/album-cover-image-2.jpg"
+                                    src="/assets/concert.jpg"
                                     alt="Card Image"
                                     className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
                                 />
@@ -91,7 +95,7 @@ const Home = ({ auth }) => {
                                 className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                             >
                                 <img
-                                    src="https://rebellion.qodeinteractive.com/wp-content/uploads/2016/09/album-cover-image-2.jpg"
+                                    src="/assets/wedding.jpg"
                                     alt="Card Image"
                                     className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
                                 />
@@ -107,7 +111,7 @@ const Home = ({ auth }) => {
                                 className="relative w-full h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                             >
                                 <img
-                                    src="https://rebellion.qodeinteractive.com/wp-content/uploads/2016/09/album-cover-image-2.jpg"
+                                    src="/assets/birthday.jpg"
                                     alt="Card Image"
                                     className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
                                 />
@@ -121,6 +125,38 @@ const Home = ({ auth }) => {
                             </div>
                         </section>
 
+                        <section className="container mx-auto px-4 py-8">
+                        <div className="flex text-left px-4">
+                            <h1 className="text-2xl font-bold text-gray-100 dark:text-white">
+                                BERITA 
+                            </h1>
+                        </div>
+
+                        <div className="border-t-2 w-48 border-gray-100 mb-8  m-4"></div>
+
+                            <Carousel showThumbs={false} infiniteLoop useKeyboardArrows autoPlay>
+                                <div className="w-full h-[500px] overflow-hidden relative">
+                                    <img src="/assets/concert.jpg" alt="Slide 1" />
+                                    <p className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">Ini memastikan deskripsi muncul di bagian bawah gambar dengan latar belakang hitam semi-transparan untuk meningkatkan keterbacaan.</p>
+                                </div>
+                                <div className="w-full h-[500px] overflow-hidden relative">
+                                    <img src="/assets/wedding.jpg" alt="Slide 2" />
+                                    <p className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">Deskripsi Pernikahan</p>
+                                </div>
+                                <div className="w-full h-[500px] overflow-hidden relative">
+                                    <img src="/assets/birthday.jpg" alt="Slide 3" />
+                                    <p className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">Deskripsi Ulang Tahun</p>
+                                </div>
+                                <div className="w-full h-[500px] overflow-hidden relative">
+                                    <img src="/assets/concert.jpg" alt="Slide 4" />
+                                    <p className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">Deskripsi Konser Musik</p>
+                                </div>
+                                <div className="w-full h-[500px] overflow-hidden relative">
+                                    <img src="/assets/concert.jpg" alt="Slide 5" />
+                                    <p className="absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">Deskripsi Konser Musik</p>
+                                </div>
+                            </Carousel>
+                        </section>
                     </div>
                 </main>
                 <CustomFooter />
