@@ -135,17 +135,18 @@ export default function Dashboard({ auth }) {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
+            <div className="py-12 bg-gray-100">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
+                        <div className="p-6 text-gray-900 border-b">
+                            <h1 className="text-2xl font-bold mb-4">Selamat datang di Dashboard Konser</h1>
+                            <p className="text-gray-600">Kelola konser Anda dengan mudah di sini.</p>
                         </div>
 
                         <div className="flex flex-col md:flex-row">
-                            <div className="md:w-1/2 p-6">
-                                <h3 className="text-lg font-semibold mb-4">Tambah Konser</h3>
-                                <form className="mb-10" onSubmit={handleSubmit}>
+                            <div className="md:w-1/2 p-6 border-r">
+                                <h3 className="text-lg font-semibold mb-4 text-blue-600">Tambah Konser Baru</h3>
+                                <form className="mb-10 space-y-4" onSubmit={handleSubmit}>
                                     <div className="relative z-0 w-full mb-5 group">
                                         <input
                                             type="text"
@@ -232,27 +233,27 @@ export default function Dashboard({ auth }) {
                                     </div>
                                     <button
                                         type="submit"
-                                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-150 ease-in-out"
                                     >
-                                        Submit
+                                        Tambah Konser
                                     </button>
                                 </form>
                             </div>
 
                             <div className="md:w-1/2 p-6">
-                                <h3 className="text-lg font-semibold mb-4">Daftar Konser</h3>
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full divide-y divide-gray-200">
-                                        <thead className="bg-gray-50">
+                                <h3 className="text-lg font-semibold mb-4 text-blue-600">Daftar Konser</h3>
+                                <div className="overflow-x-auto shadow-md sm:rounded-lg">
+                                    <table className="w-full text-sm text-left text-gray-500">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                             <tr>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                                <th scope="col" className="px-6 py-3">Nama</th>
+                                                <th scope="col" className="px-6 py-3">Lokasi</th>
+                                                <th scope="col" className="px-6 py-3">Tanggal</th>
+                                                <th scope="col" className="px-6 py-3">Harga</th>
+                                                <th scope="col" className="px-6 py-3">Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="bg-white divide-y divide-gray-200">
+                                        <tbody>
                                             {concertList}
                                         </tbody>
                                     </table>

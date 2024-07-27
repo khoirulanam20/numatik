@@ -17,6 +17,7 @@ export default function LayananDashboard({
         ulangTahuns: {},
         konserInputs: {},
     });
+    const [activeTab, setActiveTab] = useState('pernikahan');
 
     useEffect(() => {
         // Initialize selectedItems with the status from the server
@@ -40,7 +41,6 @@ export default function LayananDashboard({
     const handleCheckboxChange = async (id, type, isChecked) => {
         try {
             const value = isChecked ? 1 : 0;
-            console.log(`Updating status for ${type} with ID ${id} to ${value}`);
             await axios.put(`/api/${type}/${id}/update-status`, { status: value });
             
             setSelectedItems(prevState => ({
@@ -61,13 +61,9 @@ export default function LayananDashboard({
             try {
                 await axios.delete(`/api/${type}/${id}`);
                 if (type === "pernikahans") {
-                    setPernikahanData(
-                        pernikahanData.filter((item) => item.id !== id)
-                    );
+                    setPernikahanData(pernikahanData.filter((item) => item.id !== id));
                 } else if (type === "ulang-tahuns") {
-                    setUlangTahunData(
-                        ulangTahunData.filter((item) => item.id !== id)
-                    );
+                    setUlangTahunData(ulangTahunData.filter((item) => item.id !== id));
                 } else if (type === "konser-inputs") {
                     setKonserData(konserData.filter((item) => item.id !== id));
                 }
@@ -77,6 +73,77 @@ export default function LayananDashboard({
             }
         }
     };
+
+    const renderTable = (data, type) => (
+        <div className="overflow-x-auto shadow-md sm:rounded-lg">
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" className="p-4">
+                            <div className="flex items-center">
+                                <input
+                                    id={`checkbox-all-${type}`}
+                                    type="checkbox"
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    onChange={(e) => {
+                                        const isChecked = e.target.checked;
+                                        setSelectedItems(prevState => ({
+                                            ...prevState,
+                                            [type]: data.reduce((acc, item) => {
+                                                acc[item.id] = isChecked ? 1 : 0;
+                                                return acc;
+                                            }, {})
+                                        }));
+                                    }}
+                                />
+                                <label htmlFor={`checkbox-all-${type}`} className="sr-only">checkbox</label>
+                            </div>
+                        </th>
+                        <th scope="col" className="px-6 py-3">Nama Acara</th>
+                        <th scope="col" className="px-6 py-3">Lokasi</th>
+                        <th scope="col" className="px-6 py-3">Tanggal</th>
+                        <th scope="col" className="px-6 py-3">Paket</th>
+                        <th scope="col" className="px-6 py-3">Email</th>
+                        <th scope="col" className="px-6 py-3">Status</th>
+                        <th scope="col" className="px-6 py-3">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((item) => (
+                        <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td className="w-4 p-4">
+                                <div className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedItems[type][item.id] === 1}
+                                        onChange={(e) => handleCheckboxChange(item.id, type, e.target.checked)}
+                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    />
+                                </div>
+                            </td>
+                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {item.nama_acara}
+                            </th>
+                            <td className="px-6 py-4">{item.lokasi}</td>
+                            <td className="px-6 py-4">{item.tanggal}</td>
+                            <td className="px-6 py-4">{item.paket}</td>
+                            <td className="px-6 py-4">{item.user?.email || "Email tidak tersedia"}</td>
+                            <td className="px-6 py-4">
+                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${selectedItems[type][item.id] === 1 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                    {selectedItems[type][item.id] === 1 ? 'Sudah' : 'Belum'}
+                                </span>
+                            </td>
+                            <td className="px-6 py-4">
+                                <button onClick={() => handleDelete(item.id, type)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
+                                    Hapus
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
 
     return (
         <AuthenticatedLayout
@@ -89,422 +156,60 @@ export default function LayananDashboard({
         >
             <Head title="Dashboard Layanan" />
 
-            <div className="py-8">
+            <div className="py-12 bg-gray-100">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white overflow-hidden shadow-lg rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <h3 className="text-lg font-semibold mb-4">
-                                Daftar Layanan Pernikahan
+                            <h3 className="text-2xl font-bold mb-6 text-blue-600">
+                                Daftar Layanan
                             </h3>
 
-                            {Array.isArray(pernikahanData) &&
-                            pernikahanData.length > 0 ? (
-                                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                            <tr>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3"
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        onChange={(e) => {
-                                                            const isChecked =
-                                                                e.target
-                                                                    .checked;
-                                                            setSelectedItems(
-                                                                (
-                                                                    prevState
-                                                                ) => ({
-                                                                    ...prevState,
-                                                                    pernikahans:
-                                                                        isChecked
-                                                                            ? pernikahanData.map(
-                                                                                  (
-                                                                                      item
-                                                                                  ) =>
-                                                                                      item.id
-                                                                              )
-                                                                            : [],
-                                                                })
-                                                            );
-                                                        }}
-                                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                    />
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3"
-                                                >
-                                                    Nama Acara
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3"
-                                                >
-                                                    Lokasi
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3"
-                                                >
-                                                    Tanggal
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3"
-                                                >
-                                                    Paket
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3"
-                                                >
-                                                    Email
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3"
-                                                >
-                                                    Aksi
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {pernikahanData.map(
-                                                (pernikahan) => (
-                                                    <tr
-                                                        key={pernikahan.id}
-                                                        className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                                                    >
-                                                        <td className="px-6 py-4">
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={selectedItems.pernikahans[pernikahan.id] === 1}
-                                                                onChange={(e) => handleCheckboxChange(pernikahan.id, "pernikahans", e.target.checked)}
-                                                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                            />
-                                                        </td>
-                                                        <th
-                                                            scope="row"
-                                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                        >
-                                                            {
-                                                                pernikahan.nama_acara
-                                                            }
-                                                        </th>
-                                                        <td className="px-6 py-4">
-                                                            {pernikahan.lokasi}
-                                                        </td>
-                                                        <td className="px-6 py-4">
-                                                            {pernikahan.tanggal}
-                                                        </td>
-                                                        <td className="px-6 py-4">
-                                                            {pernikahan.paket}
-                                                        </td>
-                                                        <td className="px-6 py-4">
-                                                            {pernikahan.user &&
-                                                            pernikahan.user
-                                                                .email
-                                                                ? pernikahan
-                                                                      .user
-                                                                      .email
-                                                                : "Email tidak tersedia"}
-                                                        </td>
-                                                        <td className="px-6 py-4">
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleDelete(
-                                                                        pernikahan.id,
-                                                                        "pernikahans"
-                                                                    )
-                                                                }
-                                                                className="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                                            >
-                                                                Hapus
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            )}
-                                        </tbody>
-                                    </table>
+                            <div className="mb-6">
+                                <div className="sm:hidden">
+                                    <select
+                                        className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                                        onChange={(e) => setActiveTab(e.target.value)}
+                                        value={activeTab}
+                                    >
+                                        <option value="pernikahan">Pernikahan</option>
+                                        <option value="ulangTahun">Ulang Tahun</option>
+                                        <option value="konser">Konser</option>
+                                    </select>
                                 </div>
-                            ) : (
-                                <p>Tidak ada data pernikahan yang tersedia.</p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="py-8">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <h3 className="text-lg font-semibold mb-4 mt-8">
-                                Daftar Layanan Ulang Tahun
-                            </h3>
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
+                                <div className="hidden sm:block">
+                                    <div className="border-b border-gray-200">
+                                        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                                            <a
+                                                href="#"
+                                                className={`${activeTab === 'pernikahan' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                                                onClick={() => setActiveTab('pernikahan')}
                                             >
-                                                <input
-                                                    type="checkbox"
-                                                    onChange={(e) => {
-                                                        const isChecked =
-                                                            e.target.checked;
-                                                        setSelectedItems(
-                                                            (prevState) => ({
-                                                                ...prevState,
-                                                                ulangTahuns:
-                                                                    isChecked
-                                                                        ? ulangTahunData.map(
-                                                                              (
-                                                                                  item
-                                                                              ) =>
-                                                                                  item.id
-                                                                          )
-                                                                        : [],
-                                                            })
-                                                        );
-                                                    }}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
+                                                Pernikahan
+                                            </a>
+                                            <a
+                                                href="#"
+                                                className={`${activeTab === 'ulangTahun' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                                                onClick={() => setActiveTab('ulangTahun')}
                                             >
-                                                Nama Acara
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
+                                                Ulang Tahun
+                                            </a>
+                                            <a
+                                                href="#"
+                                                className={`${activeTab === 'konser' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                                                onClick={() => setActiveTab('konser')}
                                             >
-                                                Lokasi
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Tanggal
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Paket
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Email
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Aksi
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {ulangTahunData.map((ulangTahun) => (
-                                            <tr
-                                                key={ulangTahun.id}
-                                                className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                                            >
-                                                <td className="px-6 py-4">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedItems.ulangTahuns[ulangTahun.id] === 1}
-                                                        onChange={(e) => handleCheckboxChange(ulangTahun.id, "ulangTahuns", e.target.checked)}
-                                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                    />
-                                                </td>
-                                                <th
-                                                    scope="row"
-                                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                >
-                                                    {ulangTahun.nama_acara}
-                                                </th>
-                                                <td className="px-6 py-4">
-                                                    {ulangTahun.lokasi}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    {ulangTahun.tanggal}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    {ulangTahun.paket}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    {ulangTahun.user &&
-                                                    ulangTahun.user.email
-                                                        ? ulangTahun.user.email
-                                                        : "Email tidak tersedia"}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <button
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                ulangTahun.id,
-                                                                "ulang-tahuns"
-                                                            )
-                                                        }
-                                                        className="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                                    >
-                                                        Hapus
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                                Konser
+                                            </a>
+                                        </nav>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div className="py-8">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <h3 className="text-lg font-semibold mb-4 mt-8">
-                                Daftar Layanan Konser
-                            </h3>
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    onChange={(e) => {
-                                                        const isChecked =
-                                                            e.target.checked;
-                                                        setSelectedItems(
-                                                            (prevState) => ({
-                                                                ...prevState,
-                                                                konserInputs:
-                                                                    isChecked
-                                                                        ? konserData.map(
-                                                                              (
-                                                                                  item
-                                                                              ) =>
-                                                                                  item.id
-                                                                          )
-                                                                        : [],
-                                                            })
-                                                        );
-                                                    }}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Nama Acara
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Lokasi
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Tanggal
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Paket
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Email
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3"
-                                            >
-                                                Aksi
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {konserData &&
-                                            Array.isArray(konserData) &&
-                                            konserData.map((konserInput) => (
-                                                <tr
-                                                    key={konserInput.id}
-                                                    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                                                >
-                                                    <td className="px-6 py-4">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedItems.konserInputs[konserInput.id] === 1}
-                                                            onChange={(e) => handleCheckboxChange(konserInput.id, "konserInputs", e.target.checked)}
-                                                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                        />
-                                                    </td>
-                                                    <th
-                                                        scope="row"
-                                                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                    >
-                                                        {konserInput.nama_acara}
-                                                    </th>
-                                                    <td className="px-6 py-4">
-                                                        {konserInput.lokasi}
-                                                    </td>
-                                                    <td className="px-6 py-4">
-                                                        {konserInput.tanggal}
-                                                    </td>
-                                                    <td className="px-6 py-4">
-                                                        {konserInput.paket}
-                                                    </td>
-                                                    <td className="px-6 py-4">
-                                                        {konserInput.user &&
-                                                        konserInput.user.email
-                                                            ? konserInput.user
-                                                                  .email
-                                                            : "Email tidak tersedia"}
-                                                    </td>
-                                                    <td className="px-6 py-4">
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDelete(
-                                                                    konserInput.id,
-                                                                    "konser-inputs"
-                                                                )
-                                                            }
-                                                            className="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                                        >
-                                                            Hapus
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                            {activeTab === 'pernikahan' && renderTable(pernikahanData, 'pernikahans')}
+                            {activeTab === 'ulangTahun' && renderTable(ulangTahunData, 'ulangTahuns')}
+                            {activeTab === 'konser' && renderTable(konserData, 'konserInputs')}
+
+                            {/* Pagination component can be added here */}
                         </div>
                     </div>
                 </div>

@@ -144,10 +144,10 @@ const Home = ({ auth }) => {
 
                                 <div className="border-t-2 w-48 dark:border-gray-100 border-gray-700 m-4"></div>
 
-                                <div className="flex justify-around space-x-8 mt-7">
+                                <div className="flex flex-col md:flex-row justify-around md:h-72 space-y-4 md:space-y-0 md:space-x-6 mt-7">
                                     <a
                                         href="/konser"
-                                        className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                        className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
                                             src="/assets/concert.jpg"
@@ -163,7 +163,7 @@ const Home = ({ auth }) => {
                                     </a>
                                     <a
                                         href="/tiket-konser"
-                                        className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                        className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
                                             src="/assets/tiket.jpg"
@@ -179,7 +179,7 @@ const Home = ({ auth }) => {
                                     </a>
                                     <a
                                         href="/Pernikahan"
-                                        className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                        className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
                                             src="/assets/wedding.jpg"
@@ -195,7 +195,7 @@ const Home = ({ auth }) => {
                                     </a>
                                     <a
                                         href="/page-judul-3"
-                                        className="relative w-full h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                        className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
                                             src="/assets/birthday.jpg"
@@ -220,63 +220,67 @@ const Home = ({ auth }) => {
                                 </h1>
                             </div>
 
-                            <div className="border-t-2 w-64 dark:border-gray-100 border-gray-700 mb-8  m-4"></div>
+                            <div className="border-t-2 w-64 dark:border-gray-100 border-gray-700 mb-8 m-4"></div>
 
-                            <Carousel
-                                showThumbs={false}
-                                infiniteLoop
-                                useKeyboardArrows
-                                autoPlay
-                            >
-                                <div className="w-full h-[500px] overflow-hidden relative">
-                                    <img
-                                        src="/assets/concert.jpg"
-                                        alt="Slide 1"
-                                    />
-                                    <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
-                                        Ini memastikan deskripsi muncul di
-                                        bagian bawah gambar dengan latar
-                                        belakang hitam semi-transparan untuk
-                                        meningkatkan keterbacaan.
-                                    </p>
-                                </div>
-                                <div className="w-full h-[500px] overflow-hidden relative">
-                                    <img
-                                        src="/assets/wedding.jpg"
-                                        alt="Slide 2"
-                                    />
-                                    <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
-                                        Deskripsi Pernikahan
-                                    </p>
-                                </div>
-                                <div className="w-full h-[500px] overflow-hidden relative">
-                                    <img
-                                        src="/assets/birthday.jpg"
-                                        alt="Slide 3"
-                                    />
-                                    <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
-                                        Deskripsi Ulang Tahun
-                                    </p>
-                                </div>
-                                <div className="w-full h-[500px] overflow-hidden relative">
-                                    <img
-                                        src="/assets/concert.jpg"
-                                        alt="Slide 4"
-                                    />
-                                    <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
-                                        Deskripsi Konser Musik
-                                    </p>
-                                </div>
-                                <div className="w-full h-[500px] overflow-hidden relative">
-                                    <img
-                                        src="/assets/concert.jpg"
-                                        alt="Slide 5"
-                                    />
-                                    <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
-                                        Deskripsi Konser Musik
-                                    </p>
-                                </div>
-                            </Carousel>
+                            <div className="max-h-[300px] md:max-h-[700px]">
+                                <Carousel
+                                    showThumbs={false}
+                                    infiniteLoop
+                                    useKeyboardArrows
+                                    autoPlay
+                                >
+                                    <div className="w-full h-[300px] md:h-[600px] overflow-hidden relative">
+                                        <img
+                                            src="/assets/concert.jpg"
+                                            alt="Slide 1"
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
+                                            Ini memastikan deskripsi muncul di bagian bawah gambar dengan latar belakang hitam semi-transparan untuk meningkatkan keterbacaan.
+                                        </p>
+                                    </div>
+                                    <div className="w-full h-[300px] md:h-[600px] overflow-hidden relative">
+                                        <img
+                                            src="/assets/wedding.jpg"
+                                            alt="Slide 2"
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
+                                            Deskripsi Pernikahan
+                                        </p>
+                                    </div>
+                                    <div className="w-full h-[300px] md:h-[600px] overflow-hidden relative">
+                                        <img
+                                            src="/assets/birthday.jpg"
+                                            alt="Slide 3"
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
+                                            Deskripsi Ulang Tahun
+                                        </p>
+                                    </div>
+                                    <div className="w-full h-[300px] md:h-[600px] overflow-hidden relative">
+                                        <img
+                                            src="/assets/concert.jpg"
+                                            alt="Slide 4"
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
+                                            Deskripsi Konser Musik
+                                        </p>
+                                    </div>
+                                    <div className="w-full h-[300px] md:h-[600px] overflow-hidden relative">
+                                        <img
+                                            src="/assets/concert.jpg"
+                                            alt="Slide 5"
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <p className="absolute bottom-10 left-0 w-full text-center text-white bg-black bg-opacity-50 p-2">
+                                            Deskripsi Konser Musik
+                                        </p>
+                                    </div>
+                                </Carousel>
+                            </div>
                         </section>
 
                         <section className="py-16">
