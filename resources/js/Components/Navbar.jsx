@@ -186,7 +186,7 @@ export default function CustomNavbar({ user }) {
                                 <PopoverPanel
                                     transition
                                     anchor="bottom"
-                                    className="z-50 divide-y divide-white/100 dark:divide-gray-700 rounded-xl bg-stone-100 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 md:bg-white/55"
+                                    className="z-50 divide-y mt-6 divide-white/100 dark:divide-gray-700 rounded-xl bg-stone-100 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 md:bg-white/55"
                                 >
                                     <div className="p-3">
                                         <a

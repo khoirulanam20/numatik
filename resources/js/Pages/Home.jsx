@@ -75,12 +75,12 @@ const Home = ({ auth }) => {
     return (
         <>
             <Head title="Home" />
-            <div className="min-h-screen flex flex-col relative">
+            <div className="min-h-screen flex flex-col relative bg-gray-100 dark:bg-gray-900">
                 <CustomNavbar user={auth.user} />
                 <main className="flex-grow">
                     <div className="mx-auto">
                         <section id="banner">
-                            <section className="bg-gray-400 mb-4 dark:bg-gray-900 min-h-screen flex items-center">
+                            <section className="bg-gray-400 mb-4 dark:bg-gray-700 min-h-screen flex items-center">
                                 <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
                                     <div className="mr-auto place-self-center lg:col-span-7 rounded-lg">
                                         <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-gray-700 dark:text-white">
@@ -97,7 +97,7 @@ const Home = ({ auth }) => {
                                         </p>
                                         <a
                                             href="#"
-                                            className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                                            className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-800 hover:bg-primary-600 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 scrollToServices();
@@ -132,12 +132,12 @@ const Home = ({ auth }) => {
 
                         <div className="container mx-auto px-4 py-8">
                             <div className="flex text-left px-4">
-                                <h1 className="text-2xl font-bold text-gray-100 dark:text-white">
+                                <h1 className="text-2xl font-bold text-gray-700 dark:text-white">
                                     LAYANAN KAMI
                                 </h1>
                             </div>
 
-                            <div className="border-t-2 w-48 border-gray-100 m-4"></div>
+                            <div className="border-t-2 w-48 dark:border-gray-100 border-gray-700 m-4"></div>
 
                             <div className="flex justify-around space-x-8 mt-7">
                                 <a
@@ -210,12 +210,12 @@ const Home = ({ auth }) => {
 
                         <section className="container mx-auto px-4 py-8">
                             <div className="flex text-left px-4">
-                                <h1 className="text-2xl font-bold text-gray-100 dark:text-white">
+                                <h1 className="text-2xl font-bold text-gray-700 dark:text-white">
                                     KONSER TERDAHULU
                                 </h1>
                             </div>
 
-                            <div className="border-t-2 w-64  border-gray-100 mb-8  m-4"></div>
+                            <div className="border-t-2 w-64 dark:border-gray-100 border-gray-700 mb-8  m-4"></div>
 
                             <Carousel
                                 showThumbs={false}
@@ -276,12 +276,12 @@ const Home = ({ auth }) => {
 
                         <section className="container mx-auto px-4 py-8">
                             <div className="flex text-left px-4">
-                                <h1 className="text-2xl font-bold text-gray-100 dark:text-white">
+                                <h1 className="text-2xl font-bold text-gray-700 dark:text-white">
                                     BERITA
                                 </h1>
                             </div>
 
-                            <div className="border-t-2 w-24 border-gray-100 mb-8 m-4"></div>
+                            <div className="border-t-2 w-24 dark:border-gray-100 border-gray-700 mb-8 m-4"></div>
 
                             <div className="mt-1">
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -294,7 +294,7 @@ const Home = ({ auth }) => {
                                                     className="w-full h-64 object-cover mb-4 transition-transform duration-700 ease-in-out transform hover:scale-110 cursor-pointer"
                                                 />
                                             </div>
-                                            <span className="block text-xs text-gray-100 dark:text-white">
+                                            <span className="block text-xs text-gray-700 dark:text-white">
                                                 {formatDateIndonesian(
                                                     article.publishedAt
                                                 )}
@@ -305,18 +305,18 @@ const Home = ({ auth }) => {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    <h3 className="text-base font-bold mt-2 line-clamp-2 hover:text-gray-500">
+                                                    <h3 className="text-base font-bold mt-2 line-clamp-2 hover:text-gray-500 text-gray-700 dark:text-white">
                                                         {article.title}
                                                     </h3>
                                                 </a>
-                                                <p className="mt-1 text-sm line-clamp-4">
+                                                <p className="mt-1 text-sm line-clamp-4 text-gray-700 dark:text-white">
                                                     {article.description}
                                                 </p>
                                                 <a
                                                     href={article.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center font-medium text-gray-400 hover:text-w"
+                                                    className="inline-flex items-center font-medium text-gray-700 dark:text-white hover:text-gray-500"
                                                 >
                                                     Baca Selengkapnya
                                                 </a>
