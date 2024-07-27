@@ -66,146 +66,151 @@ const Home = ({ auth }) => {
 
     // Tambahkan fungsi scrollToServices
     const scrollToServices = () => {
-        const servicesSection = document.getElementById('layanan-kami');
+        const servicesSection = document.getElementById("layanan-kami");
         if (servicesSection) {
-            servicesSection.scrollIntoView({ behavior: 'smooth' });
+            servicesSection.scrollIntoView({ behavior: "smooth" });
         }
     };
 
     return (
         <>
             <Head title="Home" />
-            <div className="min-h-screen flex flex-col relative bg-gray-100 dark:bg-gray-900">
+            <div className="min-h-screen flex flex-col relative  bg-gray-50 dark:bg-gray-900">
                 <CustomNavbar user={auth.user} />
                 <main className="flex-grow">
                     <div className="mx-auto">
-                        <section id="banner">
-                            <section className="bg-gray-400 mb-4 dark:bg-gray-700 min-h-screen flex items-center">
-                                <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-                                    <div className="mr-auto place-self-center lg:col-span-7 rounded-lg">
-                                        <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-gray-700 dark:text-white">
+                        <section
+                            id="banner"
+                            className="bg-gradient-to-b min-h-[100vh] dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50 text-white"
+                        >
+                            <div className="container mx-auto px-4 py-16 md:py-24">
+                                <div className="grid md:grid-cols-2 gap-8 items-center">
+                                    <div>
+                                        <h1 className="text-4xl md:text-6xl font-bold mb-6">
                                             #NUMATIK
                                         </h1>
-                                        <p className="max-w-2xl mb-6 font-light text-gray-900 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
+                                        <p className="text-lg mb-8">
                                             Bergabunglah dengan kami di Numatik
                                             untuk pengalaman konser yang tak
                                             terlupakan! Dengan bangga menyajikan
                                             akses mudah dan aman untuk meraih
-                                            tiket konser impianmu. Berikut
-                                            adalah beberapa alasan mengapa
-                                            Numatik adalah pilihan terbaikmu:
+                                            tiket konser impianmu.
                                         </p>
                                         <a
                                             href="#"
-                                            className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-800 hover:bg-primary-600 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                                            className="inline-flex justify-between items-center py-2 px-4 text-sm font-medium text-white bg-gradient-to-r dark:from-blue-800 dark:to-gray-800 dark:hover:from-blue-700 dark:hover:to-gray-700 from-blue-500 to-gray-300 rounded-full hover:from-blue-400 hover:to-gray-200 transition-all duration-300 shadow-md hover:shadow-lg"
+                                            role="alert"
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 scrollToServices();
                                             }}
                                         >
-                                            Order now
+                                            <span className="bg-white text-blue-600 rounded-full px-3 py-1 text-xs font-semibold mr-3">
+                                                Baru
+                                            </span>
+                                            <span>Pesan sekarang!</span>
                                             <svg
-                                                className="w-5 h-5 ml-2 -mr-1"
+                                                className="ml-2 w-5 h-5"
                                                 fill="currentColor"
                                                 viewBox="0 0 20 20"
                                                 xmlns="http://www.w3.org/2000/svg"
                                             >
                                                 <path
                                                     fillRule="evenodd"
+                                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                                     clipRule="evenodd"
-                                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
                                                 ></path>
                                             </svg>
                                         </a>
                                     </div>
-                                    <div className="hidden lg:mt-0 lg:col-span-5 lg:flex rounded-lg">
+                                    <div className="hidden md:block">
                                         <img
                                             src="/assets/hero.png"
-                                            alt="mockup"
+                                            alt="Hero"
+                                            className="rounded-lg shadow-xl"
                                         />
                                     </div>
                                 </div>
-                            </section>
+                            </div>
                         </section>
 
                         <section id="layanan-kami" className="px-4 py-12">
+                            <div className="container mx-auto px-4 py-8">
+                                <div className="flex text-left px-4">
+                                    <h1 className="text-2xl font-bold text-gray-700 dark:text-white">
+                                        LAYANAN KAMI
+                                    </h1>
+                                </div>
 
-                        <div className="container mx-auto px-4 py-8">
-                            <div className="flex text-left px-4">
-                                <h1 className="text-2xl font-bold text-gray-700 dark:text-white">
-                                    LAYANAN KAMI
-                                </h1>
+                                <div className="border-t-2 w-48 dark:border-gray-100 border-gray-700 m-4"></div>
+
+                                <div className="flex justify-around space-x-8 mt-7">
+                                    <a
+                                        href="/konser"
+                                        className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                    >
+                                        <img
+                                            src="/assets/concert.jpg"
+                                            alt="Card Image"
+                                            className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
+                                        />
+                                        <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
+                                            <h3 className="text-xl font-bold mb-2">
+                                                Konser Musik
+                                            </h3>
+                                            <p>Deskripsi 1</p>
+                                        </div>
+                                    </a>
+                                    <a
+                                        href="/tiket-konser"
+                                        className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                    >
+                                        <img
+                                            src="/assets/tiket.jpg"
+                                            alt="Card Image"
+                                            className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
+                                        />
+                                        <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
+                                            <h3 className="text-xl font-bold mb-2">
+                                                Tiket Konser
+                                            </h3>
+                                            <p>Deskripsi 1</p>
+                                        </div>
+                                    </a>
+                                    <a
+                                        href="/Pernikahan"
+                                        className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                    >
+                                        <img
+                                            src="/assets/wedding.jpg"
+                                            alt="Card Image"
+                                            className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
+                                        />
+                                        <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
+                                            <h3 className="text-xl font-bold mb-2">
+                                                Pernikahan
+                                            </h3>
+                                            <p>Deskripsi 2</p>
+                                        </div>
+                                    </a>
+                                    <a
+                                        href="/page-judul-3"
+                                        className="relative w-full h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                    >
+                                        <img
+                                            src="/assets/birthday.jpg"
+                                            alt="Card Image"
+                                            className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
+                                        />
+                                        <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
+                                            <h3 className="text-xl font-bold mb-2">
+                                                Ulang Tahun
+                                            </h3>
+                                            <p>Deskripsi 3</p>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-
-                            <div className="border-t-2 w-48 dark:border-gray-100 border-gray-700 m-4"></div>
-
-                            <div className="flex justify-around space-x-8 mt-7">
-                                <a
-                                    href="/konser"
-                                    className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
-                                >
-                                    <img
-                                        src="/assets/concert.jpg"
-                                        alt="Card Image"
-                                        className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
-                                        <h3 className="text-xl font-bold mb-2">
-                                            Konser Musik
-                                        </h3>
-                                        <p>Deskripsi 1</p>
-                                    </div>
-                                </a>
-                                <a
-                                    href="/tiket-konser"
-                                    className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
-                                >
-                                    <img
-                                        src="/assets/tiket.jpg"
-                                        alt="Card Image"
-                                        className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
-                                        <h3 className="text-xl font-bold mb-2">
-                                            Tiket Konser
-                                        </h3>
-                                        <p>Deskripsi 1</p>
-                                    </div>
-                                </a>
-                                <a
-                                    href="/Pernikahan"
-                                    className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
-                                >
-                                    <img
-                                        src="/assets/wedding.jpg"
-                                        alt="Card Image"
-                                        className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
-                                        <h3 className="text-xl font-bold mb-2">
-                                            Pernikahan
-                                        </h3>
-                                        <p>Deskripsi 2</p>
-                                    </div>
-                                </a>
-                                <a
-                                    href="/page-judul-3"
-                                    className="relative w-full h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
-                                >
-                                    <img
-                                        src="/assets/birthday.jpg"
-                                        alt="Card Image"
-                                        className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
-                                        <h3 className="text-xl font-bold mb-2">
-                                            Ulang Tahun
-                                        </h3>
-                                        <p>Deskripsi 3</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
                         </section>
 
                         <section className="container mx-auto px-4 py-8">
@@ -274,49 +279,41 @@ const Home = ({ auth }) => {
                             </Carousel>
                         </section>
 
-                        <section className="container mx-auto px-4 py-8">
-                            <div className="flex text-left px-4">
-                                <h1 className="text-2xl font-bold text-gray-700 dark:text-white">
-                                    BERITA
-                                </h1>
-                            </div>
+                        <section className="py-16">
+                            <div className="container mx-auto px-4">
+                                <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
+                                    BERITA TERKINI
+                                </h2>
+                                <div className="w-24 h-1 bg-blue-600 mb-8"></div>
 
-                            <div className="border-t-2 w-24 dark:border-gray-100 border-gray-700 mb-8 m-4"></div>
-
-                            <div className="mt-1">
-                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div className="grid md:grid-cols-4 gap-8">
                                     {news.map((article, index) => (
-                                        <div key={index}>
-                                            <div className="relative overflow-hidden rounded-lg shadow-lg">
-                                                <img
-                                                    src={article.urlToImage}
-                                                    alt={article.title}
-                                                    className="w-full h-64 object-cover mb-4 transition-transform duration-700 ease-in-out transform hover:scale-110 cursor-pointer"
-                                                />
-                                            </div>
-                                            <span className="block text-xs text-gray-700 dark:text-white">
-                                                {formatDateIndonesian(
-                                                    article.publishedAt
-                                                )}
-                                            </span>
-                                            <div className="mt-2">
-                                                <a
-                                                    href={article.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <h3 className="text-base font-bold mt-2 line-clamp-2 hover:text-gray-500 text-gray-700 dark:text-white">
-                                                        {article.title}
-                                                    </h3>
-                                                </a>
-                                                <p className="mt-1 text-sm line-clamp-4 text-gray-700 dark:text-white">
+                                        <div
+                                            key={index}
+                                            className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden"
+                                        >
+                                            <img
+                                                src={article.urlToImage}
+                                                alt={article.title}
+                                                className="w-full h-48 object-cover"
+                                            />
+                                            <div className="p-4">
+                                                <span className="text-sm text-gray-500 dark:text-gray-300">
+                                                    {formatDateIndonesian(
+                                                        article.publishedAt
+                                                    )}
+                                                </span>
+                                                <h3 className="text-lg font-semibold mt-2 mb-2 line-clamp-2 text-gray-800 dark:text-white">
+                                                    {article.title}
+                                                </h3>
+                                                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mb-4">
                                                     {article.description}
                                                 </p>
                                                 <a
                                                     href={article.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center font-medium text-gray-700 dark:text-white hover:text-gray-500"
+                                                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
                                                 >
                                                     Baca Selengkapnya
                                                 </a>
