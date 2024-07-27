@@ -9,6 +9,9 @@ class TiketKonserController extends Controller
 {
     public function index()
     {
-        return Inertia::render('TiketKonser');
+        $concerts = \App\Models\Concert::all();
+        return Inertia::render('TiketKonser', [
+            'concerts' => $concerts
+        ]);
     }
 }

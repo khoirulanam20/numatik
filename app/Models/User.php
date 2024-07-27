@@ -43,4 +43,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relasi dengan KonserInput
+    public function konserInputs()
+    {
+        return $this->hasMany(KonserInput::class, 'id_user');
+    }
+
+    // Relasi dengan UlangTahun
+    public function ulangTahuns()
+    {
+        return $this->hasMany(UlangTahun::class, 'id_user');
+    }
+
+    // Relasi dengan Pernikahan
+    public function pernikahans()
+    {
+        return $this->hasMany(Pernikahan::class, 'id_user');
+    }
 }

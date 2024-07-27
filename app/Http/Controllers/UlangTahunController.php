@@ -26,14 +26,15 @@ class UlangTahunController extends Controller
             'paket' => 'required',
         ]);
 
+        $validatedData['id_user'] = auth()->id();
         UlangTahun::create($validatedData);
 
-        return redirect()->back()->with('success', 'Data pernikahan berhasil disimpan.');
+        return redirect()->back()->with('success', 'Data ulang tahun berhasil disimpan.');
     }
 
     public function destroy(UlangTahun $ulangTahun)
     {
         $ulangTahun->delete();
-        return response()->json(['message' => 'Pernikahan berhasil dihapus']);
+        return response()->json(['message' => 'Ulang Tahun berhasil dihapus']);
     }
 }

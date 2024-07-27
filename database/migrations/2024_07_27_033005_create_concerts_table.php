@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('concert_date');
             $table->decimal('concert_price', 8, 2);
             $table->string('concert_image')->nullable();
+            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

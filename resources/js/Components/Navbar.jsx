@@ -227,7 +227,7 @@ export default function CustomNavbar({ user }) {
                         </li>
                         <li>
                             <Link
-                                href={route("riwayat")}
+                                href="/riwayat"
                                 className="block py-2 px-3 text-black rounded md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:text-white md:dark:hover:bg-transparent"
                             >
                                 Riwayat

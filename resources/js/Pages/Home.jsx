@@ -157,6 +157,22 @@ const Home = ({ auth }) => {
                                     </div>
                                 </a>
                                 <a
+                                    href="/tiket-konser"
+                                    className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                                >
+                                    <img
+                                        src="/assets/tiket.jpg"
+                                        alt="Card Image"
+                                        className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
+                                    />
+                                    <div className="absolute inset-0 bg-black bg-opacity-70 text-white p-4 flex flex-col justify-center items-center opacity-0 transition-opacity duration-300 hover:opacity-100">
+                                        <h3 className="text-xl font-bold mb-2">
+                                            Tiket Konser
+                                        </h3>
+                                        <p>Deskripsi 1</p>
+                                    </div>
+                                </a>
+                                <a
                                     href="/Pernikahan"
                                     className="relative w-full  h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                 >

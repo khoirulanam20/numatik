@@ -15,6 +15,7 @@ use App\Http\Controllers\ConcertController;
 use App\Http\Controllers\LayananDashboardController;
 use App\Http\Controllers\KonserInputController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +37,13 @@ Route::get('/tentang', [TentangController::class, 'index'])->name('tentang');
 Route::get('/tiket-konser', [TiketKonserController::class, 'index'])->name('tiket-konser');
 Route::get('/pernikahan', [PernikahanController::class, 'index'])->name('pernikahan');
 Route::post('/pernikahan', [PernikahanController::class, 'store'])->name('pernikahans.store');
+Route::put('/pernikahans/{pernikahan}', [PernikahanController::class, 'update'])->name('pernikahans.update');
+Route::delete('/pernikahans/{pernikahan}', [PernikahanController::class, 'destroy'])->name('pernikahans.destroy');
 Route::get('/ulang-tahun', [UlangTahunController::class, 'index'])->name('ulang-tahun');
 Route::post('/ulang-tahun', [UlangTahunController::class, 'store'])->name('ulang-tahuns.store');
 Route::post('/konser-input', [KonserInputController::class, 'store'])->name('konser-inputs.store');
+Route::put('/konser-inputs/{konserInput}', [KonserInputController::class, 'update'])->name('konser-inputs.update');
+Route::delete('/konser-inputs/{konserInput}', [KonserInputController::class, 'destroy'])->name('konser-inputs.destroy');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -51,6 +56,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/concerts', [ConcertController::class, 'store'])->name('concerts.store');
     Route::put('/concerts/{id}', [ConcertController::class, 'update'])->name('concerts.update');
     Route::delete('/concerts/{id}', [ConcertController::class, 'destroy'])->name('concerts.destroy');
+    Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+    Route::put('/riwayat/updateKonser/{konserInput}', [RiwayatController::class, 'updateKonser'])->name('riwayat.updateKonser');
+    Route::put('/riwayat/updateUlangTahun/{ulangTahun}', [RiwayatController::class, 'updateUlangTahun'])->name('riwayat.updateUlangTahun');
+    Route::put('/riwayat/updatePernikahan/{pernikahan}', [RiwayatController::class, 'updatePernikahan'])->name('riwayat.updatePernikahan');
+    Route::delete('/riwayat/destroyKonser/{konserInput}', [RiwayatController::class, 'destroyKonser'])->name('riwayat.destroyKonser');
+    Route::delete('/riwayat/destroyUlangTahun/{ulangTahun}', [RiwayatController::class, 'destroyUlangTahun'])->name('riwayat.destroyUlangTahun');
+    Route::delete('/riwayat/destroyPernikahan/{pernikahan}', [RiwayatController::class, 'destroyPernikahan'])->name('riwayat.destroyPernikahan');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -58,5 +70,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/layanan', [LayananDashboardController::class, 'index'])->middleware(['auth', 'verified', 'role:admin'])->name('dashboard.layanan');
 });
 
+Route::post('/payment/process/{concertId}', [PaymentController::class, 'process'])->name('payment.process');
 
 require __DIR__.'/auth.php';

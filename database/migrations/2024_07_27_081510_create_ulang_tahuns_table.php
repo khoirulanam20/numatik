@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('ulang_tahuns', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->string('nama_acara');
             $table->string('lokasi');
             $table->date('tanggal');
@@ -23,6 +24,9 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('ulang_tahuns');
+        Schema::dropIfExists('ulang_tahuns', function (Blueprint $table){
+            $table->dropForeign(['id_user']);
+            $table->dropColumn('id_user');
+        });
     }
 };

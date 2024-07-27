@@ -15,6 +15,11 @@ class Concert extends Model
         'concert_date',
         'concert_price',
         'concert_image',
+        'id_user',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }

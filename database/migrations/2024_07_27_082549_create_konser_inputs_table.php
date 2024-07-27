@@ -9,6 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('konser_inputs', function (Blueprint $table) {
+            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->id();
             $table->string('nama_acara');
             $table->string('lokasi');
@@ -23,6 +24,9 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('konser_inputs');
+        Schema::dropIfExists('konser_inputs', function (Blueprint $table){
+            $table->dropForeign(['id_user']);
+            $table->dropColumn('id_user');
+        });
     }
 };

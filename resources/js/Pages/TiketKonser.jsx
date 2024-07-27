@@ -1,36 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Head } from "@inertiajs/react";
 import CustomNavbar from "@/Components/Navbar";
 import CustomFooter from "@/Components/Footer";
 import axios from 'axios';
 
-export default function TiketKonser({ auth }) {
-    const [concerts, setConcerts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export default function TiketKonser({ auth, concerts = [] }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [paymentUrl, setPaymentUrl] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedConcert, setSelectedConcert] = useState(null);
 
-    useEffect(() => {
-        fetchConcerts();
-    }, []);
+    const handleBuyTicket = async (concert) => {
+        if (!auth.user) {
+            alert('Silakan login terlebih dahulu untuk membeli tiket.');
+            return;
+        }
 
-    const fetchConcerts = async () => {
+        setIsLoading(true);
+        setSelectedConcert(concert);
         try {
-            setLoading(true);
-            const response = await axios.get('/api/concerts');
-            console.log('API response:', response.data); // Tambahkan log ini
-            if (Array.isArray(response.data) && response.data.length > 0) {
-                setConcerts(response.data);
-            } else if (typeof response.data === 'object' && response.data.data) {
-                // Jika data berada dalam properti 'data'
-                setConcerts(response.data.data);
+            const response = await axios.post(route('payment.process', concert.id));
+            if (response.data.paymentUrl) {
+                setPaymentUrl(response.data.paymentUrl);
+                setIsModalOpen(true);
             } else {
-                setError('Data konser tidak valid atau kosong');
+                throw new Error('URL pembayaran tidak ditemukan dalam respons');
             }
-            setLoading(false);
         } catch (error) {
-            console.error('Error fetching concerts:', error);
-            setError('Terjadi kesalahan saat mengambil data konser.');
-            setLoading(false);
+            console.error('Error processing payment:', error);
+            let errorMessage = 'Terjadi kesalahan dalam memproses pembayaran.';
+            if (error.response && error.response.data && error.response.data.error) {
+                errorMessage += ' ' + error.response.data.error;
+            }
+            alert(errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleCloseModal = () => {
+        if (confirm('Anda yakin ingin menutup jendela pembayaran? Pembayaran Anda belum selesai.')) {
+            setIsModalOpen(false);
         }
     };
 
@@ -39,86 +49,67 @@ export default function TiketKonser({ auth }) {
             <Head title="Tiket Konser" />
             <div className="min-h-screen flex flex-col">
                 <CustomNavbar user={auth.user} />
-                <main className="flex-grow">
-                    <section className="bg-white dark:bg-gray-900">
-                        <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-                            <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none mt-8 text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                                We invest in the world's potential
-                            </h1>
-                            <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-                                Here at Flowbite we focus on markets where
-                                technology, innovation, and capital can unlock
-                                long-term value and drive economic growth.
-                            </p>
-                        </div>
-                    </section>
-
-                    <div className="container mx-auto px-4 m-4 py-8">
-                        <h1 className="text-3xl font-bold mb-4">
-                            TIKET KONSER
-                        </h1>
-                        <p className="mb-6">
-                            Pilih tiket konser yang Anda inginkan.
-                        </p>
-
-                        {loading ? (
-                            <p>Memuat data konser...</p>
-                        ) : error ? (
-                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                                <strong className="font-bold">Error: </strong>
-                                <span className="block sm:inline">{error}</span>
-                            </div>
-                        ) : Array.isArray(concerts) && concerts.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {concerts.map((concert) => (
-                                    <div
-                                        key={concert.id}
-                                        className="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-                                    >
-                                        <a href="#">
-                                            <img
-                                                className="p-8 rounded-t-lg w-full h-64 object-cover"
-                                                src={concert.concert_image ? `/storage/${concert.concert_image}` : "/assets/concert.jpg"}
-                                                alt={concert.concert_name || "Konser"}
-                                                onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = "/assets/concert.jpg";
-                                                }}
-                                            />
-                                        </a>
-                                        <div className="px-5 pb-5">
-                                            <a href="#">
-                                                <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                                                    {concert.concert_name || "Nama Konser Tidak Tersedia"}
-                                                </h5>
-                                            </a>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                                {concert.concert_date || "Tanggal Tidak Tersedia"} - {concert.concert_location || "Lokasi Tidak Tersedia"}
-                                            </p>
-                                            <div className="flex items-center justify-between mt-4">
-                                                <span className="text-3xl font-bold text-gray-900 dark:text-white">
-                                                    {concert.concert_price ? `Rp ${Number(concert.concert_price).toLocaleString()}` : 'Harga Tidak Tersedia'}
-                                                </span>
-                                                <a
-                                                    href="#"
-                                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                                >
-                                                    Beli Tiket
-                                                </a>
-                                            </div>
-                                        </div>
+                <main className="flex-grow container mx-auto px-4 py-8">
+                    <h1 className="text-3xl font-bold mb-6 text-center">TIKET KONSER</h1>
+                    <p className="text-xl mb-8 text-center">Pilih tiket konser yang Anda inginkan.</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {concerts && concerts.length > 0 ? (
+                            concerts.map((concert) => (
+                                <div key={concert.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+                                    <img className="w-full h-48 object-cover" src={`/storage/${concert.concert_image}`} alt={concert.concert_name} onError={(e) => e.target.src = '/images/default-concert.jpg'} />
+                                    <div className="p-6">
+                                        <h2 className="text-2xl font-bold mb-2 text-gray-800">{concert.concert_name}</h2>
+                                        <p className="text-gray-600 mb-4">
+                                            <span className="font-semibold">Lokasi:</span> {concert.concert_location}<br />
+                                            <span className="font-semibold">Tanggal:</span> {concert.concert_date}<br />
+                                            <span className="font-semibold">Harga:</span> Rp {concert.concert_price.toLocaleString()}
+                                        </p>
+                                        <button
+                                            onClick={() => handleBuyTicket(concert)}
+                                            disabled={isLoading}
+                                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-300"
+                                        >
+                                            {isLoading ? 'Memproses...' : 'Beli Tiket'}
+                                        </button>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            ))
                         ) : (
-                            <p>Tidak ada data konser yang tersedia.</p>
+                            <p className="col-span-full text-center text-gray-500 text-lg">Tidak ada konser yang tersedia saat ini.</p>
                         )}
                     </div>
-
-
                 </main>
                 <CustomFooter />
             </div>
+
+            {isModalOpen && selectedConcert && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+                    <div className="bg-white p-8 rounded-lg max-w-md w-full transform transition-transform duration-300 scale-100">
+                        <h2 className="text-2xl font-bold mb-4">Pembayaran Tiket Konser</h2>
+                        <p className="mb-2"><strong>Konser:</strong> {selectedConcert.concert_name}</p>
+                        <p className="mb-2"><strong>Tanggal:</strong> {selectedConcert.concert_date}</p>
+                        <p className="mb-4"><strong>Harga:</strong> Rp {selectedConcert.concert_price.toLocaleString()}</p>
+                        <p className="mb-4">Klik tombol di bawah untuk melanjutkan ke halaman pembayaran:</p>
+                        <div className="flex justify-between">
+                            <a
+                                href={paymentUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+                            >
+                                Lanjutkan ke Pembayaran
+                            </a>
+                            <button
+                                onClick={handleCloseModal}
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded transition-colors duration-300"
+                            >
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

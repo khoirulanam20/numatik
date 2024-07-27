@@ -13,6 +13,7 @@ export default function Pernikahan({ auth }) {
         nomor_hp: '',
         atas_nama: '',
         paket: '',
+        id_user: auth.user.id, // Pastikan ini ada
     });
 
     const [showAlert, setShowAlert] = useState(false);

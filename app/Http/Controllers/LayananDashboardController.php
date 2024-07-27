@@ -13,9 +13,10 @@ class LayananDashboardController extends Controller
 {
     public function index()
     {
-        $pernikahans = Pernikahan::all();
-        $ulangTahuns = UlangTahun::all();
-        $konserInputs = KonserInput::all();
+        $user = auth()->user();
+        $pernikahans = $user->pernikahans;
+        $ulangTahuns = $user->ulangTahuns;
+        $konserInputs = $user->konserInputs;
         return Inertia::render('DashboardPages/LayananDashboard', [
             'pernikahans' => $pernikahans,
             'ulangTahuns' => $ulangTahuns,

@@ -17,5 +17,11 @@ class KonserInput extends Model
         'nomor_hp',
         'atas_nama',
         'paket',
+        'id_user',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }

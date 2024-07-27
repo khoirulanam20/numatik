@@ -49,6 +49,7 @@ class DatabaseSeeder extends Seeder
             'concert_date' => '2024-08-15',
             'concert_price' => 500000,
             'concert_image' => '/assets/concert.jpg',
+            'id_user' => 1, // Sesuaikan dengan id_user yang ada
         ]);
 
         // Tambahkan lebih banyak konser
@@ -58,6 +59,7 @@ class DatabaseSeeder extends Seeder
             'concert_date' => '2024-09-20',
             'concert_price' => 450000,
             'concert_image' => '/assets/concert_tulus.jpg',
+            'id_user' => 2, // Sesuaikan dengan id_user yang ada
         ]);
 
         Concert::create([
@@ -66,6 +68,7 @@ class DatabaseSeeder extends Seeder
             'concert_date' => '2024-10-10',
             'concert_price' => 400000,
             'concert_image' => '/assets/concert_sheila.jpg',
+            'id_user' => 3, // Sesuaikan dengan id_user yang ada
         ]);
     }
 }

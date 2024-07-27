@@ -13,6 +13,7 @@ export default function UlangTahun({ auth }) {
         nomor_hp: '',
         atas_nama: '',
         paket: '',
+        id_user: auth.user.id,
     });
 
     const [showAlert, setShowAlert] = useState(false);
