@@ -1,10 +1,10 @@
-import React from "react";
-import { Head, useForm } from "@inertiajs/react";
-import CustomNavbar from "@/Components/Navbar";
-import CustomFooter from "@/Components/Footer";
-import { useState } from "react";
+import React from 'react';
+import { Head, useForm } from '@inertiajs/react';
+import CustomNavbar from '@/Components/Navbar';
+import CustomFooter from '@/Components/Footer';
+import { useState } from 'react';
 
-export default function Konser({ auth }) {
+export default function UlangTahun({ auth }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         nama_acara: '',
         lokasi: '',
@@ -19,7 +19,7 @@ export default function Konser({ auth }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('konser-inputs.store'), {
+        post(route('ulang-tahuns.store'), {
             onSuccess: () => {
                 setShowAlert(true);
                 reset();
@@ -30,23 +30,23 @@ export default function Konser({ auth }) {
 
     return (
         <>
-            <Head title="Konser" />
+            <Head title="Ulang Tahun" />
             <div className="min-h-screen flex flex-col">
                 <CustomNavbar user={auth.user} />
                 <main className="flex-grow">
                     <div className="container mx-auto px-4 py-8">
-                        <h1 className="text-3xl font-bold mb-4">Konser</h1>
-                        <p className="mb-6">Informasi tentang Konser yang akan datang.</p>
+                        <h1 className="text-3xl font-bold mb-4">Ulang Tahun</h1>
+                        <p className="mb-6">Informasi tentang Ulang Tahun yang akan datang.</p>
 
                         {showAlert && (
                             <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                                 <strong className="font-bold">Berhasil! </strong>
-                                <span className="block sm:inline">Data Konser berhasil disimpan.</span>
+                                <span className="block sm:inline">Data ulang tahun berhasil disimpan.</span>
                             </div>
                         )}
 
                         <div className="flex flex-col md:flex-row gap-8">
-                            {/* Kolom Kiri - Card Paket Konser */}
+                            {/* Kolom Kiri - Card Paket Ulang Tahun */}
                             <div className="w-full md:w-1/2">
                                 {/* Card 1 */}
                                 <div className="mb-6 p-6 bg-white border border-gray-200 rounded-lg shadow">
@@ -65,7 +65,7 @@ export default function Konser({ auth }) {
                                 {/* Card 3 */}
                                 <div className="mb-6 p-6 bg-white border border-gray-200 rounded-lg shadow">
                                     <h2 className="mb-2 text-2xl font-bold">Paket 3</h2>
-                                    <p className="mb-3 text-gray-700">Saksikan penyanyi pop favorit Anda dalam Konser yang meriah!</p>
+                                    <p className="mb-3 text-gray-700">Saksikan penyanyi pop favorit Anda dalam Ulang Tahun yang meriah!</p>
                                     <p className="font-bold">Harga: Rp 550.000</p>
                                 </div>
                             </div>

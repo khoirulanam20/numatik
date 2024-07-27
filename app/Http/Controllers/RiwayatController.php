@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class SponsorController extends Controller
+class RiwayatController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Sponsor');
+        return Inertia::render('Riwayat');
     }
 }

@@ -30,7 +30,7 @@ export default function CustomNavbar({ user }) {
     };
 
     return (
-        <nav className="sticky top-0 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+        <nav className="sticky top-0 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 z-10">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <Link href="/" className="flex items-center space-x-3">
                     <img
@@ -39,7 +39,7 @@ export default function CustomNavbar({ user }) {
                         alt="Flowbite Logo"
                     />
                     <span className="self-center text-2xl font-semibold whitespace-nowrap text-black dark:text-white">
-                        Flowbite
+                        NUMATIK
                     </span>
                 </Link>
                 <div className="flex items-center md:order-2">
@@ -87,7 +87,7 @@ export default function CustomNavbar({ user }) {
                             >
                                 <span className="sr-only">Open user menu</span>
                                 <svg
-                                    class="w-6 h-6 text-gray-800 dark:text-white"
+                                    className="w-6 h-6 text-gray-800 dark:text-white"
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -96,9 +96,9 @@ export default function CustomNavbar({ user }) {
                                     viewBox="0 0 24 24"
                                 >
                                     <path
-                                        fill-rule="evenodd"
+                                        fillRule="evenodd"
                                         d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
-                                        clip-rule="evenodd"
+                                        clipRule="evenodd"
                                     />
                                 </svg>
                             </button>
@@ -171,47 +171,46 @@ export default function CustomNavbar({ user }) {
                             </Link>
                         </li>
                         <li>
-                            <Popover>
+                            <Link
+                                href={route("tiket-konser")}
+                                className="block py-2 px-3 text-black rounded md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:text-white md:dark:hover:bg-transparent"
+                            >
+                                Tiket Konser
+                            </Link>
+                        </li>
+                        <li>
+                            <Popover className="z-20">
                                 <PopoverButton className="block md:p-0 py-2 px-3 text-black dark:text-white focus:outline-none data-[active]:text-gray-400 md:flex-row md:mt-0 md:dark:hover:text-blue-500 data-[hover]:text-blue-500 data-[focus]:outline-1 data-[focus]:outline-white">
                                     Layanan
                                 </PopoverButton>
                                 <PopoverPanel
                                     transition
                                     anchor="bottom"
-                                    className="divide-y divide-white/55 dark:divide-gray-700 rounded-xl bg-stone-100 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 md:bg-white/55"
+                                    className="z-50 divide-y divide-white/100 dark:divide-gray-700 rounded-xl bg-stone-100 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 md:bg-white/55"
                                 >
                                     <div className="p-3">
                                         <a
-                                            className="block rounded-lg py-2 px-3 transition dark:hover:bg-white/10 hover:bg-white/55"
+                                            className="block rounded-lg py-2 px-3 transition dark:hover:bg-white/50 hover:bg-white/55"
                                             href={route("konser")}
                                         >
-                                            <p className="font-semibold dark:text-white text-black md:text-black">
+                                            <h1 className="font-semibold  text-black md:text-black">
                                                 Konser Musik
-                                            </p>
-                                            <p className="text-black dark:text-white md:text-black">
-                                                Measure actions your users take
-                                            </p>
+                                            </h1>
                                         </a>
                                         <a
-                                            className="block rounded-lg py-2 px-3 transition dark:hover:bg-white/10 hover:bg-white/55"
-                                            href="#"
+                                            className="block rounded-lg py-2 px-3 transition dark:hover:bg-white/50 hover:bg-white/55"
+                                            href={route("ulang-tahun")}
                                         >
-                                            <p className="font-semibold dark:text-white text-black md:text-black">
+                                            <p className="font-semibold text-black md:text-black">
                                                 Ulang Tahun
                                             </p>
-                                            <p className="text-black dark:text-white md:text-black">
-                                                Create your own targeted content
-                                            </p>
                                         </a>
                                         <a
-                                            className="block rounded-lg py-2 px-3 transition dark:hover:bg-white/10 hover:bg-white/55"
-                                            href="#"
+                                            className="block rounded-lg py-2 px-3 transition dark:hover:bg-white/50 hover:bg-white/55"
+                                            href={route("pernikahan")}
                                         >
-                                            <p className="font-semibold dark:text-white text-black md:text-black">
+                                            <p className="font-semibold text-black md:text-black">
                                                 Pernikahan
-                                            </p>
-                                            <p className="text-black dark:text-white md:text-black">
-                                                Keep track of your growth
                                             </p>
                                         </a>
                                     </div>
@@ -220,18 +219,18 @@ export default function CustomNavbar({ user }) {
                         </li>
                         <li>
                             <Link
-                                href={route("sponsor")}
-                                className="block py-2 px-3 text-black rounded md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:text-white md:dark:hover:bg-transparent"
-                            >
-                                Sponsor
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
                                 href={route("tentang")}
                                 className="block py-2 px-3 text-black rounded md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:text-white md:dark:hover:bg-transparent"
                             >
                                 Tentang
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href={route("riwayat")}
+                                className="block py-2 px-3 text-black rounded md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:text-white md:dark:hover:bg-transparent"
+                            >
+                                Riwayat
                             </Link>
                         </li>
                     </ul>
