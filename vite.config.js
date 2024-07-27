@@ -10,4 +10,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    define: {
+        'import.meta.env.VITE_MIDTRANS_CLIENT_KEY': JSON.stringify(process.env.MIDTRANS_CLIENT_KEY),
+    },
 });

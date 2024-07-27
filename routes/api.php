@@ -6,6 +6,7 @@ use App\Http\Controllers\ConcertController;
 use App\Http\Controllers\PernikahanController;
 use App\Http\Controllers\UlangTahunController;
 use App\Http\Controllers\KonserInputController;
+use App\Http\Controllers\LayananDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/concerts/{concert}', [ConcertController::class, 'destroy']);
     Route::get('/pernikahans', [PernikahanController::class, 'index']);
     Route::post('/pernikahans', [PernikahanController::class, 'store']);
-    Route::delete('/pernikahans/{pernikahan}', [PernikahanController::class, 'destroy']);
-    Route::delete('/ulang-tahuns/{ulangTahun}', [UlangTahunController::class, 'destroy']);
-    Route::delete('/konser-inputs/{konserInput}', [KonserInputController::class, 'destroy']);
+    Route::delete('/pernikahans/{id}', [PernikahanController::class, 'destroy']);
+    Route::delete('/ulang-tahuns/{id}', [UlangTahunController::class, 'destroy']);
+    Route::delete('/konser-inputs/{id}', [KonserInputController::class, 'destroy']);
+    Route::put('{type}/{id}/update-status', [LayananDashboardController::class, 'updateStatus']);
 });

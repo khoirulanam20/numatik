@@ -18,6 +18,7 @@ class KonserInput extends Model
         'atas_nama',
         'paket',
         'id_user',
+        'status',
     ];
 
     public function user()

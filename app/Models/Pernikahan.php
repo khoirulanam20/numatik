@@ -13,9 +13,12 @@ class Pernikahan extends Model
         'nama_acara',
         'lokasi',
         'tanggal',
+        'deskripsi',
+        'nomor_hp',
         'atas_nama',
         'paket',
         'id_user',
+        'status',
     ];
 
     public function user()

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('atas_nama');
             $table->string('paket');
             $table->timestamps();
+            $table->tinyInteger('status')->default(0);
         });
     }
 
@@ -27,6 +28,7 @@ return new class extends Migration
         Schema::dropIfExists('konser_inputs', function (Blueprint $table){
             $table->dropForeign(['id_user']);
             $table->dropColumn('id_user');
+            $table->dropColumn('status');
         });
     }
 };

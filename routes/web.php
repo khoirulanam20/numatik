@@ -63,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/riwayat/destroyKonser/{konserInput}', [RiwayatController::class, 'destroyKonser'])->name('riwayat.destroyKonser');
     Route::delete('/riwayat/destroyUlangTahun/{ulangTahun}', [RiwayatController::class, 'destroyUlangTahun'])->name('riwayat.destroyUlangTahun');
     Route::delete('/riwayat/destroyPernikahan/{pernikahan}', [RiwayatController::class, 'destroyPernikahan'])->name('riwayat.destroyPernikahan');
+    Route::post('/riwayat/toggleComplete/{ulangTahun}', [RiwayatController::class, 'toggleComplete'])->name('riwayat.toggleComplete');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

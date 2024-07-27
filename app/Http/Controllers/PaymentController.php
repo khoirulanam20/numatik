@@ -7,7 +7,6 @@ use App\Models\Concert;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Illuminate\Support\Facades\Log;
-use GuzzleHttp\Exception\RequestException;
 
 class PaymentController extends Controller
 {
@@ -25,8 +24,6 @@ class PaymentController extends Controller
             $concert = Concert::findOrFail($concertId);
             
             Log::info('Processing payment for concert: ' . $concert->concert_name);
-            Log::info('Midtrans Server Key: ' . substr(config('services.midtrans.server_key'), 0, 10) . '...');
-            Log::info('Midtrans Is Production: ' . (config('services.midtrans.is_production') ? 'true' : 'false'));
 
             $orderId = 'ORDER-' . time();
 
@@ -60,17 +57,14 @@ class PaymentController extends Controller
 
             Log::info('Midtrans parameters: ' . json_encode($midtransParams));
 
-            $paymentUrl = Snap::createTransaction($midtransParams)->redirect_url;
+            $snapToken = Snap::getSnapToken($midtransParams);
             
-            Log::info('Payment URL generated: ' . $paymentUrl);
+            Log::info('Snap Token generated: ' . $snapToken);
 
-            return response()->json(['paymentUrl' => $paymentUrl]);
+            return response()->json(['snap_token' => $snapToken]);
         } catch (\Exception $e) {
             Log::error('Payment processing error: ' . $e->getMessage());
             Log::error('Error trace: ' . $e->getTraceAsString());
-            if ($e instanceof RequestException) {
-                Log::error('API Response: ' . $e->getResponse()->getBody()->getContents());
-            }
             return response()->json(['error' => 'Terjadi kesalahan dalam memproses pembayaran: ' . $e->getMessage()], 500);
         }
     }

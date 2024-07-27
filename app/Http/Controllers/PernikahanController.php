@@ -49,9 +49,10 @@ class PernikahanController extends Controller
         return redirect()->back()->with('success', 'Data pernikahan berhasil diperbarui.');
     }
 
-    public function destroy(Pernikahan $pernikahan)
+    public function destroy($id)
     {
+        $pernikahan = Pernikahan::findOrFail($id);
         $pernikahan->delete();
-        return redirect()->back()->with('success', 'Data pernikahan berhasil dihapus.');
+        return response()->json(['message' => 'Pernikahan berhasil dihapus']);
     }
 }

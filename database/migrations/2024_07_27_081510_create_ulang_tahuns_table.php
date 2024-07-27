@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nomor_hp');
             $table->string('atas_nama');
             $table->string('paket');
+            $table->boolean('status')->default(0); // Added status column with default 0
             $table->timestamps();
         });
     }
@@ -27,6 +28,7 @@ return new class extends Migration
         Schema::dropIfExists('ulang_tahuns', function (Blueprint $table){
             $table->dropForeign(['id_user']);
             $table->dropColumn('id_user');
+            $table->dropColumn('status'); // Drop the status column
         });
     }
 };

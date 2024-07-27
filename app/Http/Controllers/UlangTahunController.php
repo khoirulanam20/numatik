@@ -32,6 +32,14 @@ class UlangTahunController extends Controller
         return redirect()->back()->with('success', 'Data ulang tahun berhasil disimpan.');
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $ulangTahun = UlangTahun::findOrFail($id);
+        $ulangTahun->status = $request->input('status');
+        $ulangTahun->save();
+        return response()->json(['message' => 'Status berhasil diperbarui']);
+    }
+
     public function destroy(UlangTahun $ulangTahun)
     {
         $ulangTahun->delete();

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import CustomNavbar from '@/Components/Navbar';
 import CustomFooter from '@/Components/Footer';
+import axios from 'axios';
 
 export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans }) {
     const [editingItem, setEditingItem] = useState(null);
@@ -50,11 +51,12 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans }
     const renderTable = (items, type) => (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-8">
             <table className="w-full text-sm text-left text-gray-500 px-4 py-4 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-800 dark:text-gray-400">
                     <tr>
                         <th scope="col" className="px-6 py-3">Nama Acara</th>
                         <th scope="col" className="px-6 py-3">Lokasi</th>
                         <th scope="col" className="px-6 py-3">Tanggal</th>
+                        <th scope="col" className="px-6 py-3">Paket</th>
                         <th scope="col" className="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
@@ -66,6 +68,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans }
                             </th>
                             <td className="px-6 py-4">{item.lokasi}</td>
                             <td className="px-6 py-4">{item.tanggal}</td>
+                            <td className="px-6 py-4">{item.paket}</td>
                             <td className="px-6 py-4">
                                 <button onClick={() => handleEdit(item, type)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Edit</button>
                                 <button onClick={() => handleDelete(item, type)} className="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
@@ -96,61 +99,102 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans }
                         {renderTable(pernikahans, 'Pernikahan')}
 
                         {editingItem && (
-                            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-                                <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                                    <h3 className="text-lg font-bold mb-4">Edit {editingItem.type}</h3>
-                                    <form onSubmit={handleUpdate}>
-                                        <input
-                                            type="text"
-                                            value={data.nama_acara}
-                                            onChange={(e) => setData('nama_acara', e.target.value)}
-                                            className="w-full p-2 mb-2 border rounded"
-                                            placeholder="Nama Acara"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={data.lokasi}
-                                            onChange={(e) => setData('lokasi', e.target.value)}
-                                            className="w-full p-2 mb-2 border rounded"
-                                            placeholder="Lokasi"
-                                        />
-                                        <input
-                                            type="date"
-                                            value={data.tanggal}
-                                            onChange={(e) => setData('tanggal', e.target.value)}
-                                            className="w-full p-2 mb-2 border rounded"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={data.deskripsi}
-                                            onChange={(e) => setData('deskripsi', e.target.value)}
-                                            className="w-full p-2 mb-2 border rounded"
-                                            placeholder="Deskripsi"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={data.nomor_hp}
-                                            onChange={(e) => setData('nomor_hp', e.target.value)}
-                                            className="w-full p-2 mb-2 border rounded"
-                                            placeholder="Nomor HP"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={data.atas_nama}
-                                            onChange={(e) => setData('atas_nama', e.target.value)}
-                                            className="w-full p-2 mb-2 border rounded"
-                                            placeholder="Atas Nama"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={data.paket}
-                                            onChange={(e) => setData('paket', e.target.value)}
-                                            className="w-full p-2 mb-2 border rounded"
-                                            placeholder="Paket"
-                                        />
-                                        <div className="flex justify-end">
-                                            <button type="button" onClick={() => setEditingItem(null)} className="mr-2 px-4 py-2 bg-gray-300 rounded">Batal</button>
-                                            <button type="submit" disabled={processing} className="px-4 py-2 bg-blue-500 text-white rounded">
+                            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                                <div className="relative top-20 mx-auto p-8 border w-full max-w-md shadow-lg rounded-lg bg-white dark:bg-gray-800">
+                                    <h3 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Edit {editingItem.type}</h3>
+                                    <form onSubmit={handleUpdate} className="space-y-4">
+                                        <div>
+                                            <label htmlFor="nama_acara" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Acara</label>
+                                            <input
+                                                id="nama_acara"
+                                                type="text"
+                                                value={data.nama_acara}
+                                                onChange={(e) => setData('nama_acara', e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Nama Acara"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="lokasi" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Lokasi</label>
+                                            <input
+                                                id="lokasi"
+                                                type="text"
+                                                value={data.lokasi}
+                                                onChange={(e) => setData('lokasi', e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Lokasi"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="tanggal" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal</label>
+                                            <input
+                                                id="tanggal"
+                                                type="date"
+                                                value={data.tanggal}
+                                                onChange={(e) => setData('tanggal', e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="deskripsi" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi</label>
+                                            <input
+                                                id="deskripsi"
+                                                type="text"
+                                                value={data.deskripsi}
+                                                onChange={(e) => setData('deskripsi', e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Deskripsi"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="nomor_hp" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor HP</label>
+                                            <input
+                                                id="nomor_hp"
+                                                type="text"
+                                                value={data.nomor_hp}
+                                                onChange={(e) => setData('nomor_hp', e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Nomor HP"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="atas_nama" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Atas Nama</label>
+                                            <input
+                                                id="atas_nama"
+                                                type="text"
+                                                value={data.atas_nama}
+                                                onChange={(e) => setData('atas_nama', e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Atas Nama"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="paket" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paket</label>
+                                            <select
+                                                id="paket"
+                                                value={data.paket}
+                                                onChange={(e) => setData('paket', e.target.value)}
+                                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                            >
+                                                <option value="">Pilih Paket</option>
+                                                <option value="Paket1">Paket1</option>
+                                                <option value="Paket2">Paket2</option>
+                                                <option value="Paket3">Paket3</option>
+                                            </select>
+                                        </div>
+                                        <div className="flex justify-end space-x-4 mt-6">
+                                            <button 
+                                                type="button" 
+                                                onClick={() => setEditingItem(null)} 
+                                                className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-300"
+                                            >
+                                                Batal
+                                            </button>
+                                            <button 
+                                                type="submit" 
+                                                disabled={processing} 
+                                                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300 disabled:opacity-50"
+                                            >
                                                 {processing ? 'Menyimpan...' : 'Simpan'}
                                             </button>
                                         </div>

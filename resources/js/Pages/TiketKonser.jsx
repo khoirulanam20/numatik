@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import CustomNavbar from "@/Components/Navbar";
 import CustomFooter from "@/Components/Footer";
 import axios from 'axios';
 
 export default function TiketKonser({ auth, concerts = [] }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [paymentUrl, setPaymentUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [selectedConcert, setSelectedConcert] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [snapToken, setSnapToken] = useState(null);
+
+    useEffect(() => {
+        // Inisialisasi Midtrans Snap
+        const midtransScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+        const myMidtransClientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
+
+        let scriptTag = document.createElement('script');
+        scriptTag.src = midtransScriptUrl;
+        scriptTag.setAttribute('data-client-key', myMidtransClientKey);
+
+        document.body.appendChild(scriptTag);
+
+        return () => {
+            document.body.removeChild(scriptTag);
+        }
+    }, []);
 
     const handleBuyTicket = async (concert) => {
         if (!auth.user) {
@@ -20,11 +36,11 @@ export default function TiketKonser({ auth, concerts = [] }) {
         setSelectedConcert(concert);
         try {
             const response = await axios.post(route('payment.process', concert.id));
-            if (response.data.paymentUrl) {
-                setPaymentUrl(response.data.paymentUrl);
-                setIsModalOpen(true);
+            if (response.data.snap_token) {
+                setSnapToken(response.data.snap_token);
+                setShowModal(true);
             } else {
-                throw new Error('URL pembayaran tidak ditemukan dalam respons');
+                throw new Error('Token Snap tidak ditemukan dalam respons');
             }
         } catch (error) {
             console.error('Error processing payment:', error);
@@ -38,9 +54,27 @@ export default function TiketKonser({ auth, concerts = [] }) {
         }
     };
 
-    const handleCloseModal = () => {
-        if (confirm('Anda yakin ingin menutup jendela pembayaran? Pembayaran Anda belum selesai.')) {
-            setIsModalOpen(false);
+    const handlePayment = () => {
+        if (snapToken) {
+            window.snap.pay(snapToken, {
+                onSuccess: function(result){
+                    alert('Pembayaran berhasil!');
+                    setShowModal(false);
+                    // Refresh halaman atau update state sesuai kebutuhan
+                    window.location.reload();
+                },
+                onPending: function(result){
+                    alert('Pembayaran tertunda, silakan selesaikan pembayaran Anda.');
+                    setShowModal(false);
+                },
+                onError: function(result){
+                    alert('Pembayaran gagal, silakan coba lagi.');
+                    setShowModal(false);
+                },
+                onClose: function(){
+                    setShowModal(false);
+                }
+            });
         }
     };
 
@@ -81,35 +115,31 @@ export default function TiketKonser({ auth, concerts = [] }) {
                     </div>
                 </main>
                 <CustomFooter />
-            </div>
 
-            {isModalOpen && selectedConcert && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
-                    <div className="bg-white p-8 rounded-lg max-w-md w-full transform transition-transform duration-300 scale-100">
-                        <h2 className="text-2xl font-bold mb-4">Pembayaran Tiket Konser</h2>
-                        <p className="mb-2"><strong>Konser:</strong> {selectedConcert.concert_name}</p>
-                        <p className="mb-2"><strong>Tanggal:</strong> {selectedConcert.concert_date}</p>
-                        <p className="mb-4"><strong>Harga:</strong> Rp {selectedConcert.concert_price.toLocaleString()}</p>
-                        <p className="mb-4">Klik tombol di bawah untuk melanjutkan ke halaman pembayaran:</p>
-                        <div className="flex justify-between">
-                            <a
-                                href={paymentUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
-                            >
-                                Lanjutkan ke Pembayaran
-                            </a>
-                            <button
-                                onClick={handleCloseModal}
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded transition-colors duration-300"
-                            >
-                                Tutup
-                            </button>
+                {showModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white p-8 rounded-lg shadow-xl">
+                            <h2 className="text-2xl font-bold mb-4">Pembayaran Tiket</h2>
+                            <p className="mb-4">Anda akan membeli tiket untuk konser: {selectedConcert?.concert_name}</p>
+                            <p className="mb-6">Harga: Rp {selectedConcert?.concert_price.toLocaleString()}</p>
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-400 transition duration-300"
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    onClick={handlePayment}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
+                                >
+                                    Bayar Sekarang
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </>
     );
 }
