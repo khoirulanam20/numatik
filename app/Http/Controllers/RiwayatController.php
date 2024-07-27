@@ -17,11 +17,13 @@ class RiwayatController extends Controller
         $konserInputs = $user->konserInputs;
         $ulangTahuns = $user->ulangTahuns;
         $pernikahans = $user->pernikahans;
+        $concertTickets = $user->concertTickets; // Asumsikan relasi sudah diatur di model User
 
         return Inertia::render('Riwayat', [
             'konserInputs' => $konserInputs,
             'ulangTahuns' => $ulangTahuns,
             'pernikahans' => $pernikahans,
+            'concertTickets' => $concertTickets, // Tambahkan ini
         ]);
     }
 
@@ -63,6 +65,26 @@ class RiwayatController extends Controller
         return redirect()->back()->with('message', 'Pernikahan berhasil diperbarui');
     }
 
+    public function updateUlangTahun(Request $request, UlangTahun $ulangTahun)
+    {
+        if (auth()->id() !== $ulangTahun->id_user) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $validatedData = $request->validate([
+            'nama_acara' => 'required|string|max:255',
+            'lokasi' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+            'deskripsi' => 'required',
+            'nomor_hp' => 'required',
+            'atas_nama' => 'required',
+            'paket' => 'required',
+        ]);
+
+        $ulangTahun->update($validatedData);
+        return redirect()->back()->with('message', 'Ulang Tahun berhasil diperbarui');
+    }
+
     public function destroyKonser(KonserInput $konserInput)
     {
         if (auth()->id() !== $konserInput->id_user) {
@@ -81,5 +103,15 @@ class RiwayatController extends Controller
         
         $pernikahan->delete();
         return redirect()->back()->with('message', 'Pernikahan berhasil dihapus');
+    }
+
+    public function destroyUlangTahun(UlangTahun $ulangTahun)
+    {
+        if (auth()->id() !== $ulangTahun->id_user) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $ulangTahun->delete();
+        return redirect()->back()->with('message', 'Ulang Tahun berhasil dihapus');
     }
 }

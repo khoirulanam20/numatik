@@ -13,7 +13,7 @@ class UlangTahun extends Model
         'nama_acara',
         'lokasi',
         'tanggal',
-        'deskripsi',
+        'deskripsi', // Added deskripsi column
         'nomor_hp',
         'atas_nama',
         'paket',

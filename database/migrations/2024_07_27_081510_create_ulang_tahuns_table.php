@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('nama_acara');
             $table->string('lokasi');
             $table->date('tanggal');
-            $table->text('deskripsi');
+            $table->text('deskripsi'); // Added deskripsi column
             $table->string('nomor_hp');
             $table->string('atas_nama');
             $table->string('paket');
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->dropForeign(['id_user']);
             $table->dropColumn('id_user');
             $table->dropColumn('status'); // Drop the status column
+            $table->dropColumn('deskripsi'); // Drop the deskripsi column
         });
     }
 };

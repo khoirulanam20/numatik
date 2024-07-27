@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('nama_acara');
             $table->string('lokasi');
             $table->date('tanggal');
+            $table->text('deskripsi'); 
+            $table->string('nomor_hp');
             $table->string('atas_nama');
             $table->string('paket');
             $table->timestamps();
