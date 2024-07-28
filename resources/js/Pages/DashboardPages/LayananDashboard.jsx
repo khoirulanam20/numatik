@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Head } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import axios from "axios";
@@ -74,6 +74,27 @@ export default function LayananDashboard({
         }
     };
 
+    const copyToClipboard = (text, id) => {
+        navigator.clipboard.writeText(text).then(() => {
+            const defaultIcon = document.getElementById(`default-icon-${id}`);
+            const successIcon = document.getElementById(`success-icon-${id}`);
+            const defaultTooltip = document.getElementById(`default-tooltip-message-${id}`);
+            const successTooltip = document.getElementById(`success-tooltip-message-${id}`);
+
+            defaultIcon.classList.add('hidden');
+            successIcon.classList.remove('hidden');
+            defaultTooltip.classList.add('hidden');
+            successTooltip.classList.remove('hidden');
+
+            setTimeout(() => {
+                defaultIcon.classList.remove('hidden');
+                successIcon.classList.add('hidden');
+                defaultTooltip.classList.remove('hidden');
+                successTooltip.classList.add('hidden');
+            }, 2000);
+        });
+    };
+
     const renderTable = (data, type) => (
         <div className="overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -127,7 +148,41 @@ export default function LayananDashboard({
                             <td className="px-6 py-4">{item.lokasi}</td>
                             <td className="px-6 py-4">{item.tanggal}</td>
                             <td className="px-6 py-4">{item.paket}</td>
-                            <td className="px-6 py-4">{item.user?.email || "Email tidak tersedia"}</td>
+                            <td className="px-6 py-4">
+                                <div className="w-full max-w-[16rem]">
+                                    <div className="relative">
+                                        <input
+                                            id={`email-input-${item.id}`}
+                                            type="text"
+                                            className="col-span-6 bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            value={item.user?.email || "Email tidak tersedia"}
+                                            disabled
+                                            readOnly
+                                        />
+                                        <button
+                                            onClick={() => copyToClipboard(item.user?.email || "Email tidak tersedia", item.id)}
+                                            data-tooltip-target={`tooltip-copy-email-${item.id}`}
+                                            className="absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 inline-flex items-center justify-center"
+                                        >
+                                            <span id={`default-icon-${item.id}`}>
+                                                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                                    <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
+                                                </svg>
+                                            </span>
+                                            <span id={`success-icon-${item.id}`} className="hidden">
+                                                <svg className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 inline-flex" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <div id={`tooltip-copy-email-${item.id}`} role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                            <span id={`default-tooltip-message-${item.id}`}>Salin ke clipboard</span>
+                                            <span id={`success-tooltip-message-${item.id}`} className="hidden">Tersalin!</span>
+                                            <div className="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                             <td className="px-6 py-4">
                                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${selectedItems[type][item.id] === 1 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                                     {selectedItems[type][item.id] === 1 ? 'Sudah' : 'Belum'}
@@ -209,7 +264,12 @@ export default function LayananDashboard({
                             {activeTab === 'ulangTahun' && renderTable(ulangTahunData, 'ulangTahuns')}
                             {activeTab === 'konser' && renderTable(konserData, 'konserInputs')}
 
-                            {/* Pagination component can be added here */}
+                            {/* Hapus atau komentari baris berikut jika tidak digunakan */}
+                            {/* <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            /> */}
                         </div>
                     </div>
                 </div>

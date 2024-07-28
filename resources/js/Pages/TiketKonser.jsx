@@ -88,7 +88,7 @@ export default function TiketKonser({ auth, concerts = [] }) {
                         <h1 className="text-4xl font-bold mb-2 text-left text-gray-800 dark:text-white">Tiket Konser</h1>
                         <p className="text-xl mb-8 text-left text-gray-600 dark:text-gray-300">Pilih tiket konser yang Anda inginkan.</p>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                             {concerts && concerts.length > 0 ? (
                                 concerts.map((concert) => (
                                     <div key={concert.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105">
