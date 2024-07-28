@@ -43,32 +43,5 @@ class DatabaseSeeder extends Seeder
             'role' => 'user',
         ]);
 
-        Concert::create([
-            'concert_name' => 'Konser Raisa',
-            'concert_location' => 'Gelora Bung Karno, Jakarta',
-            'concert_date' => '2024-08-15',
-            'concert_price' => 500000,
-            'concert_image' => '/assets/concert.jpg',
-            'id_user' => 1, // Sesuaikan dengan id_user yang ada
-        ]);
-
-        // Tambahkan lebih banyak konser
-        Concert::create([
-            'concert_name' => 'Konser Tulus',
-            'concert_location' => 'Istora Senayan, Jakarta',
-            'concert_date' => '2024-09-20',
-            'concert_price' => 450000,
-            'concert_image' => '/assets/concert_tulus.jpg',
-            'id_user' => 2, // Sesuaikan dengan id_user yang ada
-        ]);
-
-        Concert::create([
-            'concert_name' => 'Konser Sheila on 7',
-            'concert_location' => 'Stadion Maguwoharjo, Yogyakarta',
-            'concert_date' => '2024-10-10',
-            'concert_price' => 400000,
-            'concert_image' => '/assets/concert_sheila.jpg',
-            'id_user' => 3, // Sesuaikan dengan id_user yang ada
-        ]);
     }
 }
