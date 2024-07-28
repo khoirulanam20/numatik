@@ -7,7 +7,7 @@ export default function Tentang({ auth }) {
     return (
         <>
             <Head title="Tentang" />
-            <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+            <div className="min-h-screen flex flex-col  bg-gradient-to-b dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50">
                 <CustomNavbar user={auth.user} />
                 <main className="flex-grow">
                     <div className="container mx-auto px-4 py-12">

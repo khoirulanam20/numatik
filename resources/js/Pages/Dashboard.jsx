@@ -6,6 +6,10 @@ import axios from 'axios';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
+function formatCurrency(value) {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+}
+
 export default function Dashboard({ auth }) {
     const [concerts, setConcerts] = useState([]);
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -49,6 +53,7 @@ export default function Dashboard({ auth }) {
             for (let key in data) {
                 formData.append(key, data[key]);
             }
+            formData.append('id_user', auth.user.id); // Tambahkan id_user ke formData
             const response = await axios.post('/concerts', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -103,7 +108,7 @@ export default function Dashboard({ auth }) {
                 <td className="px-6 py-4 whitespace-nowrap">{concert.concert_name}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{concert.concert_location}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{concert.concert_date}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{concert.concert_price}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{formatCurrency(concert.concert_price)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
                         onClick={() => openModal(concert)}

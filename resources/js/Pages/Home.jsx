@@ -75,15 +75,15 @@ const Home = ({ auth }) => {
     return (
         <>
             <Head title="Home" />
-            <div className="min-h-screen flex flex-col relative  bg-gray-50 dark:bg-gray-900">
+            <div className=" flex flex-col relative bg-gradient-to-b dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50">
                 <CustomNavbar user={auth.user} />
                 <main className="flex-grow">
                     <div className="mx-auto">
                         <section
                             id="banner"
-                            className="bg-gradient-to-b min-h-[100vh] dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50 text-white"
+                            className="min-h-[100vh]  text-white"
                         >
-                            <div className="container mx-auto px-4 py-16 md:py-24">
+                            <div className="container mx-auto px-4 ml-64 pt-0 md:py-24">
                                 <div className="grid md:grid-cols-2 gap-8 items-center">
                                     <div>
                                         <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -123,11 +123,10 @@ const Home = ({ auth }) => {
                                             </svg>
                                         </a>
                                     </div>
-                                    <div className="hidden md:block">
+                                    <div className="hidden ml-24 md:block">
                                         <img
-                                            src="/assets/hero.png"
+                                            src="/assets/logoo.png"
                                             alt="Hero"
-                                            className="rounded-lg shadow-xl"
                                         />
                                     </div>
                                 </div>

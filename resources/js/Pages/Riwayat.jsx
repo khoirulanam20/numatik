@@ -4,7 +4,7 @@ import CustomNavbar from '@/Components/Navbar';
 import CustomFooter from '@/Components/Footer';
 import axios from 'axios';
 
-export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans }) {
+export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, concert }) {
     const [editingItem, setEditingItem] = useState(null);
     const { data, setData, put, delete: destroy, processing, errors } = useForm({
         nama_acara: '',
@@ -14,7 +14,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans }
         nomor_hp: '',
         atas_nama: '',
         paket: '',
-        id_user: auth.user.id,
+        id_user: auth?.user?.id || '', // Tambahkan pemeriksaan keberadaan auth.user
     });
 
     const handleEdit = (item, type) => {
@@ -80,16 +80,56 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans }
         </div>
     );
 
+    const renderConcert = () => (
+        <div className="overflow-x-auto shadow-md rounded-lg">
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" className="px-6 py-3">Nama Konser</th>
+                        <th scope="col" className="px-6 py-3">Lokasi</th>
+                        <th scope="col" className="px-6 py-3">Tanggal</th>
+                        <th scope="col" className="px-6 py-3">Harga</th>
+                        <th scope="col" className="px-6 py-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {concert && concert.map((ticket) => (
+                        <tr key={ticket.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {ticket.concert.concert_name}
+                            </th>
+                            <td className="px-6 py-4">{ticket.concert.concert_location}</td>
+                            <td className="px-6 py-4">{ticket.concert.concert_date}</td>
+                            <td className="px-6 py-4">Rp {ticket.concert.concert_price.toLocaleString('id-ID')}</td>
+                            <td className="px-6 py-4">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    ticket.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                    {ticket.status === 'paid' ? 'Lunas' : 'Menunggu Pembayaran'}
+                                </span>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+
     return (
         <>
             <Head title="Riwayat" />
-            <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
-                <CustomNavbar user={auth.user} />
+            <div className="min-h-screen flex flex-col  bg-gradient-to-b dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50">
+                <CustomNavbar user={auth?.user} /> {/* Tambahkan pemeriksaan keberadaan auth.user */}
                 <main className="flex-grow container mx-auto px-4 py-8">
                     <div className="max-w-7xl mx-auto">
-                        <h1 className="text-4xl font-bold mb-2 text-left text-gray-800 dark:text-white  ">Riwayat Pesanan</h1>
+                        <h1 className="text-4xl font-bold mb-2 text-left text-gray-800 dark:text-white">Riwayat Pesanan</h1>
                         
                         <div className="space-y-8">
+                            <section>
+                                <h2 className="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Tiket Konser</h2>
+                                {renderConcert()}
+                            </section>
+
                             <section>
                                 <h2 className="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Konser</h2>
                                 {renderTable(konserInputs, 'Konser')}

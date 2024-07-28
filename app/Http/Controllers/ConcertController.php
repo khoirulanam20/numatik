@@ -16,19 +16,16 @@ class ConcertController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'concert_name' => 'required|string|max:255',
             'concert_location' => 'required|string|max:255',
             'concert_date' => 'required|date',
             'concert_price' => 'required|numeric',
             'concert_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'id_user' => 'required|exists:users,id', // Pastikan id_user divalidasi
         ]);
 
-        $concert = new Concert();
-        $concert->concert_name = $request->concert_name;
-        $concert->concert_location = $request->concert_location;
-        $concert->concert_date = $request->concert_date;
-        $concert->concert_price = $request->concert_price;
+        $concert = new Concert($validatedData);
 
         if ($request->hasFile('concert_image')) {
             $path = $request->file('concert_image')->store('concert_images', 'public');

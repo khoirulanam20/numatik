@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\KonserInput;
 use App\Models\UlangTahun;
 use App\Models\Pernikahan;
+use App\Models\ConcertTicket;
 
 class RiwayatController extends Controller
 {
@@ -17,13 +18,14 @@ class RiwayatController extends Controller
         $konserInputs = $user->konserInputs;
         $ulangTahuns = $user->ulangTahuns;
         $pernikahans = $user->pernikahans;
-        $concertTickets = $user->concertTickets; // Asumsikan relasi sudah diatur di model User
+        $concertTickets = ConcertTicket::where('user_id', $user->id)->with('concert')->get();
 
         return Inertia::render('Riwayat', [
+            'auth' => $user,
             'konserInputs' => $konserInputs,
             'ulangTahuns' => $ulangTahuns,
             'pernikahans' => $pernikahans,
-            'concertTickets' => $concertTickets, // Tambahkan ini
+            'concertTickets' => $concertTickets,
         ]);
     }
 

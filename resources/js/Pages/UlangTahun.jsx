@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import CustomNavbar from '@/Components/Navbar';
 import CustomFooter from '@/Components/Footer';
@@ -7,13 +7,20 @@ export default function UlangTahun({ auth }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         nama_acara: '',
         lokasi: '',
-        tanggal: '',
+        tanggal: '',    
         deskripsi: '',
         nomor_hp: '',
         atas_nama: '',
         paket: '',
-        id_user: auth.user.id,
+        id_user: auth?.user?.id || '',
     });
+
+    useEffect(() => {
+        if (!auth.user) {
+            alert('Silakan login terlebih dahulu untuk mengakses halaman ini.');
+            window.location.href = route('login');
+        }
+    }, [auth.user]);
 
     const [showAlert, setShowAlert] = useState(false);
 
@@ -31,7 +38,7 @@ export default function UlangTahun({ auth }) {
     return (
         <>
             <Head title="Ulang Tahun" />
-            <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+            <div className="min-h-screen flex flex-col  bg-gradient-to-b dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50">
                 <CustomNavbar user={auth.user} />
                 <main className="flex-grow container mx-auto px-4 py-8">
                     <div className="max-w-7xl mx-auto">
