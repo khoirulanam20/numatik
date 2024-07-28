@@ -31,7 +31,7 @@ export default function CustomNavbar({ user }) {
     };
 
     return (
-        <nav className="sticky top-0 w-full max-w-screen-xl mt-5 px-6 py-3 mx-auto text-white bg-white border shadow-md rounded-xl border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200 z-10">
+        <nav className="sticky top-0 w-full max-w-screen-2xl mt-5 px-6 py-3 mx-auto text-white bg-white border shadow-md rounded-xl border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200 z-10">
             <div className="flex items-center justify-between text-gray-900">
                 <Link href="/" className="mr-4 flex items-center py-1.5 font-sans text-base font-semibold leading-relaxed tracking-normal text-inherit antialiased">
                     <img

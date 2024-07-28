@@ -12,6 +12,7 @@ function formatCurrency(value) {
 
 export default function Dashboard({ auth }) {
     const [concerts, setConcerts] = useState([]);
+    const [users, setUsers] = useState([]);
     const { data, setData, post, processing, errors, reset } = useForm({
         concert_name: '',
         concert_location: '',
@@ -35,6 +36,7 @@ export default function Dashboard({ auth }) {
 
     useEffect(() => {
         fetchConcerts();
+        fetchUsers();
     }, []);
 
     const fetchConcerts = async () => {
@@ -43,6 +45,23 @@ export default function Dashboard({ auth }) {
             setConcerts(response.data);
         } catch (error) {
             console.error('Error fetching concerts:', error.response ? error.response.data : error.message);
+        }
+    };
+
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get('/api/users');
+            setUsers(response.data);
+        } catch (error) {
+            console.error('Error mengambil data pengguna:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
+            }
         }
     };
 
@@ -98,6 +117,17 @@ export default function Dashboard({ auth }) {
                 fetchConcerts();
             } catch (error) {
                 console.error('Error deleting concert:', error.response ? error.response.data : error.message);
+            }
+        }
+    };
+
+    const handleDeleteUser = async (id) => {
+        if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+            try {
+                await axios.delete(`/api/users/${id}`);
+                fetchUsers();
+            } catch (error) {
+                console.error('Error menghapus pengguna:', error.response ? error.response.data : error.message);
             }
         }
     };
@@ -266,6 +296,36 @@ export default function Dashboard({ auth }) {
                             </div>
                         </div>
 
+                        <div className="p-6">
+                            <h3 className="text-lg font-semibold mb-4 text-blue-600">Daftar Pengguna</h3>
+                            <div className="overflow-x-auto shadow-md sm:rounded-lg">
+                                <table className="w-full text-sm text-left text-gray-500">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3">Nama</th>
+                                            <th scope="col" className="px-6 py-3">Email</th>
+                                            <th scope="col" className="px-6 py-3">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {users.map((user) => (
+                                            <tr key={user.id} className="bg-white border-b">
+                                                <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <button
+                                                        onClick={() => handleDeleteUser(user.id)}
+                                                        className="text-red-600 hover:text-red-900"
+                                                    >
+                                                        Hapus
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

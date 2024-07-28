@@ -149,7 +149,7 @@ const Home = ({ auth }) => {
                                         className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
-                                            src="/assets/concert.jpg"
+                                            src="/assets/1.png"
                                             alt="Card Image"
                                             className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
                                         />
@@ -165,7 +165,7 @@ const Home = ({ auth }) => {
                                         className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
-                                            src="/assets/tiket.jpg"
+                                            src="/assets/4.png"
                                             alt="Card Image"
                                             className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
                                         />
@@ -181,7 +181,7 @@ const Home = ({ auth }) => {
                                         className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
-                                            src="/assets/wedding.jpg"
+                                            src="/assets/2.png"
                                             alt="Card Image"
                                             className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
                                         />
@@ -197,7 +197,7 @@ const Home = ({ auth }) => {
                                         className="relative w-full h-24 md:h-72 overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
                                     >
                                         <img
-                                            src="/assets/birthday.jpg"
+                                            src="/assets/3.png"
                                             alt="Card Image"
                                             className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-50"
                                         />

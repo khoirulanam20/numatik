@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ConcertTicket;
 use Inertia\Inertia;
+use App\Models\User;
 
-class KonserDashboardController extends Controller
+class TiketKonserDashboardController extends Controller
 {
     public function index()
     {
@@ -19,5 +20,10 @@ class KonserDashboardController extends Controller
         return Inertia::render('DashboardPages/TiketKonserDashboard', [
             'tickets' => $tickets
         ]);
+    }
+
+    public function users()
+    {
+        return User::all();
     }
 }

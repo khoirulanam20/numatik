@@ -35,6 +35,12 @@ export default function Authenticated({ user, header, children }) {
                                         >
                                             Layanan Dashboard
                                         </NavLink>
+                                        <NavLink
+                                            href={route("dashboard.tiket-konser")}
+                                            active={route().current("dashboard.tiket-konser")}
+                                        >
+                                            Tiket Konser
+                                        </NavLink>
                                     </>
                                 )}
                                 {user.role === "user" && (

@@ -60,6 +60,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                         <th scope="col" className="px-6 py-3">Lokasi</th>
                         <th scope="col" className="px-6 py-3">Tanggal</th>
                         <th scope="col" className="px-6 py-3">Paket</th>
+                        <th scope="col" className="px-6 py-3">Status</th>
                         <th scope="col" className="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
@@ -72,6 +73,13 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                             <td className="px-6 py-4">{item.lokasi}</td>
                             <td className="px-6 py-4">{item.tanggal}</td>
                             <td className="px-6 py-4">{item.paket}</td>
+                            <td className="px-6 py-4">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                item.status === 1 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                                {item.status === 1 ? 'Selesai' : 'Diproses'}
+                            </span>
+                        </td>
                             <td className="px-6 py-4 space-x-2">
                                 <button onClick={() => handleEdit(item, type)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                                 <button onClick={() => handleDelete(item, type)} className="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>

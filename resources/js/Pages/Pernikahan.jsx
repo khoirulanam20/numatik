@@ -56,9 +56,9 @@ export default function Pernikahan({ auth }) {
                             {/* Kolom Kiri - Card Paket Pernikahan */}
                             <div className="w-full lg:w-1/2">
                                 {[
-                                    { title: "Paket 1", description: "Paket pernikahan lengkap dengan dekorasi mewah dan catering untuk 200 tamu.", price: "Rp 50.000.000" },
-                                    { title: "Paket 2", description: "Paket pernikahan menengah dengan dekorasi elegan dan catering untuk 150 tamu.", price: "Rp 35.000.000" },
-                                    { title: "Paket 3", description: "Paket pernikahan sederhana namun indah dengan catering untuk 100 tamu.", price: "Rp 25.000.000" }
+                                    { title: "Paket Platinum", description: "Paket pernikahan eksklusif dengan dekorasi mewah, catering untuk 300 tamu, dan hiburan live band.", price: "Rp 75.000.000" },
+                                    { title: "Paket Gold", description: "Paket pernikahan lengkap dengan dekorasi elegan, catering untuk 200 tamu, dan hiburan DJ.", price: "Rp 50.000.000" },
+                                    { title: "Paket Silver", description: "Paket pernikahan menengah dengan dekorasi cantik, catering untuk 150 tamu, dan hiburan akustik.", price: "Rp 35.000.000" },
                                 ].map((paket, index) => (
                                     <div key={index} className="mb-6 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                                         <h2 className="mb-2 text-2xl font-bold text-gray-800 dark:text-white">{paket.title}</h2>
@@ -120,9 +120,9 @@ export default function Pernikahan({ auth }) {
                                             required
                                         >
                                             <option value="">Pilih Paket</option>
-                                            <option value="paket1">Paket 1</option>
-                                            <option value="paket2">Paket 2</option>
-                                            <option value="paket3">Paket 3</option>
+                                            <option value="paket1">Paket Platinum</option>
+                                            <option value="paket2">Paket Gold</option>
+                                            <option value="paket3">Paket Silver</option>
                                         </select>
                                         {errors.paket && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.paket}</p>}
                                     </div>

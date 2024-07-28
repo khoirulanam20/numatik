@@ -149,8 +149,9 @@ export default function TiketKonser({ auth, concerts = [] }) {
                         </div>
                     </div>
                 )}
+                            <CustomFooter />
             </div>
-            <CustomFooter />
+
         </>
     );
 }

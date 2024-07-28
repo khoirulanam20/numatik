@@ -16,6 +16,8 @@ use App\Http\Controllers\LayananDashboardController;
 use App\Http\Controllers\KonserInputController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\KonserDashboardController;
+use App\Http\Controllers\TiketKonserDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/layanan-dashboard', [LayananDashboardController::class, 'index'])->name('layanan.dashboard');
     Route::get('/dashboard/layanan', [LayananDashboardController::class, 'index'])->middleware(['auth', 'verified', 'role:admin'])->name('dashboard.layanan');
+    Route::get('/dashboard/tiket-konser', [TiketKonserDashboardController::class, 'index'])->name('dashboard.tiket-konser');
 });
 
 Route::post('/payment/process/{concertId}', [PaymentController::class, 'process'])->name('payment.process');

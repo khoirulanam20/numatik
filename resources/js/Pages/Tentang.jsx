@@ -14,7 +14,7 @@ export default function Tentang({ auth }) {
                         <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
                             <div className="md:flex">
                                 <div className="md:flex-shrink-0">
-                                    <img className="h-full w-full object-cover md:w-48" src="/assets/birthday.jpg" alt="Event Organizer" />
+                                    <img className="h-full w-full object-cover md:w-48" src="/assets/logoo.png" alt="Event Organizer" />
                                 </div>
                                 <div className="p-8">
                                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Tentang Kami</div>
