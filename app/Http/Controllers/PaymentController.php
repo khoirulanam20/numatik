@@ -8,6 +8,7 @@ use Midtrans\Config;
 use Midtrans\Snap;
 use Illuminate\Support\Facades\Log;
 use App\Models\ConcertTicket;
+use App\User;
 
 class PaymentController extends Controller
 {
@@ -27,15 +28,7 @@ class PaymentController extends Controller
             
             Log::info('Processing payment for concert: ' . $concert->concert_name);
 
-            // Buat tiket terlebih dahulu
-            $ticket = ConcertTicket::create([
-                'user_id' => $user->id,
-                'concert_id' => $concert->id,
-                'status' => 'paid',
-                'purchase_date' => now(),
-            ]);
-
-            $orderId = 'TICKET-' . $ticket->id;
+            $orderId = 'TICKET-' . uniqid();
 
             $transaction_details = [
                 'order_id' => $orderId,
@@ -66,7 +59,7 @@ class PaymentController extends Controller
             
             Log::info('Snap Token generated: ' . $snapToken);
 
-            return response()->json(['snap_token' => $snapToken, 'ticket_id' => $ticket->id]);
+            return response()->json(['snap_token' => $snapToken, 'order_id' => $orderId]);
         } catch (\Exception $e) {
             Log::error('Payment processing error: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
@@ -75,19 +68,49 @@ class PaymentController extends Controller
 
     public function handleCallback(Request $request)
     {
+        Log::info('Callback received: ' . json_encode($request->all()));
+
         $serverKey = config('services.midtrans.server_key');
         $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+        
         if ($hashed == $request->signature_key) {
+            Log::info('Signature verified');
+            
             if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                Log::info('Transaction status is capture or settlement');
+                
                 $orderId = $request->order_id;
-                $ticketId = substr($orderId, 6); // Assuming order_id format is 'TICKET-{id}'
-                $ticket = ConcertTicket::find($ticketId);
-                if ($ticket) {
-                    $ticket->status = 'paid';
-                    $ticket->save();
+                $concertId = substr($orderId, 7, strpos($orderId, '-', 7) - 7);
+                
+                Log::info('Extracted concert ID: ' . $concertId);
+                $concert = Concert::find($concertId);
+                $user = \App\Models\User::where('email', $request->email)->first();
+                
+                if ($concert && $user) {
+                    Log::info('Concert and user found. Creating ticket.');
+                    try {
+                        $ticket = ConcertTicket::create([
+                            'user_id' => $user->id,
+                            'concert_id' => $concert->id,
+                            'status' => 'paid',
+                            'purchase_date' => now(),
+                            'order_id' => $orderId
+                        ]);
+                        
+                        Log::info('Ticket created successfully: ' . $ticket->id);
+                    } catch (\Exception $e) {
+                        Log::error('Error creating ticket: ' . $e->getMessage());
+                    }
+                } else {
+                    Log::warning('Concert or user not found. Concert ID: ' . $concertId . ', Email: ' . $request->email);
                 }
+            } else {
+                Log::info('Transaction status is not capture or settlement: ' . $request->transaction_status);
             }
+        } else {
+            Log::warning('Invalid signature');
         }
+        
         return response('OK', 200);
     }
 }
