@@ -6,6 +6,7 @@ import Dropdown from "@/Components/Dropdown";
 export default function CustomNavbar({ user }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const isAuthenticated = !!user;
 
     useEffect(() => {
         const theme = localStorage.getItem("theme");
@@ -209,13 +210,13 @@ export default function CustomNavbar({ user }) {
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <Link
                             href="/"
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 dark:text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-150 ease-in-out"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700  hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-150 ease-in-out"
                         >
                             Beranda
                         </Link>
                         <Link
                             href={route("tiket-konser")}
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 dark:text-gray-900 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-150 ease-in-out"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700  hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-150 ease-in-out"
                         >
                             Tiket Konser
                         </Link>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import CustomNavbar from '@/Components/Navbar';
+import CustomNavbar from '@/Components/Navbar'; 
 import CustomFooter from '@/Components/Footer';
-import axios from 'axios';
 
 export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, concertTickets }) {
+    console.log('auth:', auth);
+    console.log('auth.user:', auth?.user);
+
     const [editingItem, setEditingItem] = useState(null);
     const { data, setData, put, delete: destroy, processing, errors } = useForm({
         nama_acara: '',
@@ -14,8 +16,9 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
         nomor_hp: '',
         atas_nama: '',
         paket: '',
-        id_user: auth?.user?.id || '', // Tambahkan pemeriksaan keberadaan auth.user
+        id_user: auth?.user?.id || '', 
     });
+
 
     const handleEdit = (item, type) => {
         setEditingItem({ ...item, type });
@@ -90,6 +93,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                         <th scope="col" className="px-6 py-3">Tanggal</th>
                         <th scope="col" className="px-6 py-3">Harga</th>
                         <th scope="col" className="px-6 py-3">Status</th>
+                        <th scope="col" className="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,6 +112,18 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                                     {ticket.status === 'paid' ? 'Terbayarkan' : 'Menunggu Pembayaran'}
                                 </span>
                             </td>
+                            <td className="px-6 py-4">
+                                {ticket.status === 'paid' && (
+                                    <a
+                                        href={route('riwayat.downloadTicket', ticket.id)}
+                                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Unduh Tiket
+                                    </a>
+                                )}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -119,7 +135,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
         <>
             <Head title="Riwayat" />
             <div className="min-h-screen flex flex-col  bg-gradient-to-b dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50">
-                <CustomNavbar user={auth?.user} /> {/* Tambahkan pemeriksaan keberadaan auth.user */}
+            <CustomNavbar user={auth.user} />
                 <main className="flex-grow container mx-auto px-4 py-8">
                     <div className="max-w-7xl mx-auto">
                         <h1 className="text-4xl font-bold mb-2 text-left text-gray-800 dark:text-white">Riwayat Pesanan</h1>

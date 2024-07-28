@@ -9,6 +9,7 @@ use App\Models\KonserInput;
 use App\Models\UlangTahun;
 use App\Models\Pernikahan;
 use App\Models\ConcertTicket;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class RiwayatController extends Controller
 {
@@ -115,5 +116,18 @@ class RiwayatController extends Controller
         
         $ulangTahun->delete();
         return redirect()->back()->with('message', 'Ulang Tahun berhasil dihapus');
+    }
+
+    public function downloadTicket($ticketId)
+    {
+        $ticket = ConcertTicket::with('concert')->findOrFail($ticketId);
+        
+        if (auth()->id() !== $ticket->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $pdf = PDF::loadView('pdf.concert-ticket', ['ticket' => $ticket]);
+        
+        return $pdf->download('tiket-konser-' . $ticket->id . '.pdf');
     }
 }
