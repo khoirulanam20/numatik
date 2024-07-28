@@ -65,6 +65,6 @@ class User extends Authenticatable
     // Relasi dengan ConcertTicket
     public function concertTickets()
     {
-        return $this->hasMany(ConcertTicket::class);
+        return $this->hasMany(ConcertTicket::class, 'id_user');
     }
 }

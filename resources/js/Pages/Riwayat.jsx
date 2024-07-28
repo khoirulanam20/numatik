@@ -4,7 +4,7 @@ import CustomNavbar from '@/Components/Navbar';
 import CustomFooter from '@/Components/Footer';
 import axios from 'axios';
 
-export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, concert }) {
+export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, concertTickets }) {
     const [editingItem, setEditingItem] = useState(null);
     const { data, setData, put, delete: destroy, processing, errors } = useForm({
         nama_acara: '',
@@ -93,7 +93,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                     </tr>
                 </thead>
                 <tbody>
-                    {concert && concert.map((ticket) => (
+                    {concertTickets && concertTickets.map((ticket) => (
                         <tr key={ticket.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {ticket.concert.concert_name}
@@ -105,7 +105,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                     ticket.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                 }`}>
-                                    {ticket.status === 'paid' ? 'Lunas' : 'Menunggu Pembayaran'}
+                                    {ticket.status === 'paid' ? 'Terbayarkan' : 'Menunggu Pembayaran'}
                                 </span>
                             </td>
                         </tr>

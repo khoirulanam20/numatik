@@ -23,16 +23,10 @@ class TiketKonserController extends Controller
         $user = auth()->user();
         $concert = Concert::findOrFail($concertId);
 
-        // Proses pembayaran di sini (gunakan Midtrans atau sistem pembayaran lainnya)
+        // Proses pembayaran dengan Midtrans
+        $paymentController = new PaymentController();
+        $result = $paymentController->process($request, $concertId);
 
-        // Jika pembayaran berhasil, simpan tiket
-        $ticket = ConcertTicket::create([
-            'user_id' => $user->id,
-            'concert_id' => $concert->id,
-            'status' => 'paid',
-            'purchase_date' => now(),
-        ]);
-
-        return response()->json(['message' => 'Tiket berhasil dibeli', 'ticket' => $ticket]);
+        return $result;
     }
 }

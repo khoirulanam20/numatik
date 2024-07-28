@@ -73,5 +73,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::post('/payment/process/{concertId}', [PaymentController::class, 'process'])->name('payment.process');
 Route::post('/tiket/buy/{concert}', [TiketKonserController::class, 'buyTicket'])->name('tiket.buy');
+Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
 
 require __DIR__.'/auth.php';

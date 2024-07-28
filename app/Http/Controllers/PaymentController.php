@@ -7,6 +7,7 @@ use App\Models\Concert;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Illuminate\Support\Facades\Log;
+use App\Models\ConcertTicket;
 
 class PaymentController extends Controller
 {
@@ -22,10 +23,19 @@ class PaymentController extends Controller
     {
         try {
             $concert = Concert::findOrFail($concertId);
+            $user = $request->user();
             
             Log::info('Processing payment for concert: ' . $concert->concert_name);
 
-            $orderId = 'ORDER-' . time();
+            // Buat tiket terlebih dahulu
+            $ticket = ConcertTicket::create([
+                'user_id' => $user->id,
+                'concert_id' => $concert->id,
+                'status' => 'paid',
+                'purchase_date' => now(),
+            ]);
+
+            $orderId = 'TICKET-' . $ticket->id;
 
             $transaction_details = [
                 'order_id' => $orderId,
@@ -39,14 +49,9 @@ class PaymentController extends Controller
                 'name' => $concert->concert_name,
             ]];
 
-            $userData = [
-                'first_name' => $request->user()->name,
-                'email' => $request->user()->email,
-            ];
-
             $customer_details = [
-                'first_name' => $userData['first_name'],
-                'email' => $userData['email'],
+                'first_name' => $user->name,
+                'email' => $user->email,
             ];
 
             $midtransParams = [
@@ -61,11 +66,28 @@ class PaymentController extends Controller
             
             Log::info('Snap Token generated: ' . $snapToken);
 
-            return response()->json(['snap_token' => $snapToken]);
+            return response()->json(['snap_token' => $snapToken, 'ticket_id' => $ticket->id]);
         } catch (\Exception $e) {
             Log::error('Payment processing error: ' . $e->getMessage());
-            Log::error('Error trace: ' . $e->getTraceAsString());
-            return response()->json(['error' => 'Terjadi kesalahan dalam memproses pembayaran: ' . $e->getMessage()], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function handleCallback(Request $request)
+    {
+        $serverKey = config('services.midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+        if ($hashed == $request->signature_key) {
+            if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                $orderId = $request->order_id;
+                $ticketId = substr($orderId, 6); // Assuming order_id format is 'TICKET-{id}'
+                $ticket = ConcertTicket::find($ticketId);
+                if ($ticket) {
+                    $ticket->status = 'paid';
+                    $ticket->save();
+                }
+            }
+        }
+        return response('OK', 200);
     }
 }
