@@ -83,10 +83,10 @@ const Home = ({ auth }) => {
                             id="banner"
                             className="min-h-[100vh]  text-white"
                         >
-                            <div className="container mx-auto px-4 ml-64 pt-0 md:py-24">
+                            <div className="container mx-auto px-4 ml-0 md:ml-60 pt-0 md:py-24">
                                 <div className="grid md:grid-cols-2 gap-8 items-center">
                                     <div>
-                                        <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                                        <h1 className="text-4xl md:text-6xl md:mt-10 mt-20 font-bold mb-6">
                                             #NUMATIK
                                         </h1>
                                         <p className="text-lg mb-8">
@@ -123,7 +123,7 @@ const Home = ({ auth }) => {
                                             </svg>
                                         </a>
                                     </div>
-                                    <div className="hidden ml-24 md:block">
+                                    <div className="hidden ml-0 md:ml-40 md:block">
                                         <img
                                             src="/assets/logoo.png"
                                             alt="Hero"
