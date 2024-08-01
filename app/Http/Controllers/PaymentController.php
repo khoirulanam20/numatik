@@ -8,7 +8,7 @@ use Midtrans\Config;
 use Midtrans\Snap;
 use Illuminate\Support\Facades\Log;
 use App\Models\ConcertTicket;
-use App\User;
+use Midtrans\Notification;
 
 class PaymentController extends Controller
 {
@@ -26,9 +26,16 @@ class PaymentController extends Controller
             $concert = Concert::findOrFail($concertId);
             $user = $request->user();
             
-            Log::info('Processing payment for concert: ' . $concert->concert_name);
+            Log::info('Memproses pembayaran untuk konser: ' . $concert->concert_name);
 
-            $orderId = 'TICKET-' . uniqid();
+            $ticket = ConcertTicket::create([
+                'user_id' => $user->id,
+                'concert_id' => $concert->id,
+                'status' => 'pending',
+                'purchase_date' => now(),
+            ]);
+
+            $orderId = 'TICKET-' . $ticket->id;
 
             $transaction_details = [
                 'order_id' => $orderId,
@@ -53,64 +60,66 @@ class PaymentController extends Controller
                 'item_details' => $item_details,
             ];
 
-            Log::info('Midtrans parameters: ' . json_encode($midtransParams));
+            Log::info('Parameter Midtrans: ' . json_encode($midtransParams));
 
             $snapToken = Snap::getSnapToken($midtransParams);
             
-            Log::info('Snap Token generated: ' . $snapToken);
+            Log::info('Token Snap dibuat: ' . $snapToken);
 
-            return response()->json(['snap_token' => $snapToken, 'order_id' => $orderId]);
+            return response()->json(['snap_token' => $snapToken, 'ticket_id' => $ticket->id]);
         } catch (\Exception $e) {
-            Log::error('Payment processing error: ' . $e->getMessage());
+            Log::error('Kesalahan pemrosesan pembayaran: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function handleCallback(Request $request)
     {
-        Log::info('Callback received: ' . json_encode($request->all()));
+        try {
+            $notification = new Notification();
 
-        $serverKey = config('services.midtrans.server_key');
-        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
-        
-        if ($hashed == $request->signature_key) {
-            Log::info('Signature verified');
-            
-            if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
-                Log::info('Transaction status is capture or settlement');
-                
-                $orderId = $request->order_id;
-                $concertId = substr($orderId, 7, strpos($orderId, '-', 7) - 7);
-                
-                Log::info('Extracted concert ID: ' . $concertId);
-                $concert = Concert::find($concertId);
-                $user = \App\Models\User::where('email', $request->email)->first();
-                
-                if ($concert && $user) {
-                    Log::info('Concert and user found. Creating ticket.');
-                    try {
-                        $ticket = ConcertTicket::create([
-                            'user_id' => $user->id,
-                            'concert_id' => $concert->id,
-                            'status' => 'paid',
-                            'purchase_date' => now(),
-                            'order_id' => $orderId
-                        ]);
-                        
-                        Log::info('Ticket created successfully: ' . $ticket->id);
-                    } catch (\Exception $e) {
-                        Log::error('Error creating ticket: ' . $e->getMessage());
-                    }
-                } else {
-                    Log::warning('Concert or user not found. Concert ID: ' . $concertId . ', Email: ' . $request->email);
-                }
-            } else {
-                Log::info('Transaction status is not capture or settlement: ' . $request->transaction_status);
+            $transaction = $notification->transaction_status;
+            $type = $notification->payment_type;
+            $orderId = $notification->order_id;
+            $fraud = $notification->fraud_status;
+
+            Log::info('Callback diterima: ' . json_encode($notification));
+
+            $ticketId = substr($orderId, 7);
+            $ticket = ConcertTicket::find($ticketId);
+
+            if (!$ticket) {
+                Log::error('Tiket tidak ditemukan untuk ID: ' . $ticketId);
+                return response('Tiket tidak ditemukan', 404);
             }
-        } else {
-            Log::warning('Invalid signature');
+
+            if ($transaction == 'capture') {
+                if ($type == 'credit_card') {
+                    if($fraud == 'challenge') {
+                        $ticket->status = 'challenge';
+                    } else {
+                        $ticket->status = 'success';
+                    }
+                }
+            } elseif ($transaction == 'settlement') {
+                $ticket->status = 'success';
+            } elseif($transaction == 'pending') {
+                $ticket->status = 'pending';
+            } elseif ($transaction == 'deny') {
+                $ticket->status = 'deny';
+            } elseif ($transaction == 'expire') {
+                $ticket->status = 'expire';
+            } elseif ($transaction == 'cancel') {
+                $ticket->status = 'cancel';
+            }
+
+            $ticket->save();
+            Log::info('Status tiket diperbarui menjadi: ' . $ticket->status);
+
+            return response('OK', 200);
+        } catch (\Exception $e) {
+            Log::error('Kesalahan dalam menangani callback: ' . $e->getMessage());
+            return response('Kesalahan Server', 500);
         }
-        
-        return response('OK', 200);
     }
 }

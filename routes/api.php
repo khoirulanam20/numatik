@@ -8,6 +8,7 @@ use App\Http\Controllers\UlangTahunController;
 use App\Http\Controllers\KonserInputController;
 use App\Http\Controllers\LayananDashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TiketKonserDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ use App\Http\Controllers\UserController;
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "api" middleware group. Make something great!
-|
+|   
 */
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -34,4 +35,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/konser-inputs/{id}', [KonserInputController::class, 'destroy']);
     Route::put('{type}/{id}/update-status', [LayananDashboardController::class, 'updateStatus']);
     Route::get('/users', [UserController::class, 'index']);
+    Route::post('/update-status', [TiketKonserDashboardController::class, 'updateStatus']);
 });

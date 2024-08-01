@@ -38,12 +38,12 @@ export default function TiketKonserDashboard({ auth, tickets }) {
                                                 <p className="mb-3 font-normal text-gray-700">
                                                     <strong>Status:</strong> 
                                                     <span className={`ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                                        ticket.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                                        ticket.status === 'settlement' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                                     }`}>
-                                                        {ticket.status === 'paid' ? 'Terbayar' : 'Menunggu Pembayaran'}
+                                                        {ticket.status === 'settlement' ? 'Terbayar' : 'Menunggu Pembayaran'}
                                                     </span>
                                                 </p>
-                                                {ticket.status === 'paid' && (
+                                                {ticket.status === 'settlement' && (
                                                     <a
                                                         href={route('riwayat.downloadTicket', ticket.id)}
                                                         className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"

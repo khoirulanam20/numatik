@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import CustomNavbar from '@/Components/Navbar'; 
 import CustomFooter from '@/Components/Footer';
+import axios from 'axios';
 
 export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, concertTickets }) {
     console.log('auth:', auth);
@@ -31,13 +32,13 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
     const handleEdit = (item, type) => {
         setEditingItem({ ...item, type });
         setData({
-            nama_acara: item.nama_acara,
-            lokasi: item.lokasi,
-            tanggal: item.tanggal,
-            deskripsi: item.deskripsi,
-            nomor_hp: item.nomor_hp,
-            atas_nama: item.atas_nama,
-            paket: item.paket,
+            nama_acara: item.nama_acara || '',
+            lokasi: item.lokasi || '',
+            tanggal: item.tanggal || '',
+            deskripsi: item.deskripsi || '',
+            nomor_hp: item.nomor_hp || '',
+            atas_nama: item.atas_nama || '',
+            paket: item.paket || '',
         });
     };
 
@@ -48,6 +49,9 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
             onSuccess: () => {
                 setEditingItem(null);
             },
+            onError: () => {
+                alert('Terjadi kesalahan saat menyimpan data.');
+            }
         });
     };
 
@@ -55,7 +59,38 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
         if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
             destroy(route(`riwayat.destroy${type}`, item.id), {
                 preserveScroll: true,
+                onError: () => {
+                    alert('Terjadi kesalahan saat menghapus data.');
+                }
             });
+        }
+    };
+
+    const handlePayment = async (ticketId) => {
+        try {
+            const response = await axios.post(route('payment.process', ticketId));
+            if (response.data.snap_token) {
+                window.snap.pay(response.data.snap_token, {
+                    onSuccess: function(result) {
+                        alert('Pembayaran berhasil!');
+                        window.location.reload();
+                    },
+                    onPending: function(result) {
+                        alert('Pembayaran tertunda, silakan selesaikan pembayaran Anda.');
+                    },
+                    onError: function(result) {
+                        alert('Pembayaran gagal, silakan coba lagi.');
+                    },
+                    onClose: function() {
+                        alert('Anda menutup popup tanpa menyelesaikan pembayaran.');
+                    }
+                });
+            } else {
+                throw new Error('Token Snap tidak ditemukan dalam respons');
+            }
+        } catch (error) {
+            console.error('Error processing payment:', error);
+            alert('Terjadi kesalahan dalam memproses pembayaran.');
         }
     };
 
@@ -123,13 +158,13 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                             <td className="px-6 py-4">Rp {ticket.concert.concert_price.toLocaleString('id-ID')}</td>
                             <td className="px-6 py-4">
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                    ticket.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                    ticket.status === 'settlement' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                 }`}>
-                                    {ticket.status === 'paid' ? 'Selesai' : 'Menunggu Pembayaran'}
+                                    {ticket.status === 'settlement' ? 'Selesai' : 'Menunggu Pembayaran'}
                                 </span>
                             </td>
                             <td className="px-6 py-4">
-                                {ticket.status === 'paid' && (
+                                {ticket.status === 'settlement' ? (
                                     <a
                                         href={route('riwayat.downloadTicket', ticket.id)}
                                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -138,6 +173,13 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                                     >
                                         Unduh Tiket
                                     </a>
+                                ) : (
+                                    <button
+                                        onClick={() => handlePayment(ticket.id)}
+                                        className="font-medium text-green-600 dark:text-green-500 hover:underline"
+                                    >
+                                        Bayar
+                                    </button>
                                 )}
                             </td>
                         </tr>

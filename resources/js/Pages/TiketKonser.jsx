@@ -60,12 +60,12 @@ export default function TiketKonser({ auth, concerts = [] }) {
                 onSuccess: function(result){
                     alert('Pembayaran berhasil!');
                     setShowModal(false);
-                    // Refresh halaman atau update state sesuai kebutuhan
-                    window.location.reload();
+                    window.location.href = route('riwayat.index');
                 },
                 onPending: function(result){
                     alert('Pembayaran tertunda, silakan selesaikan pembayaran Anda.');
                     setShowModal(false);
+                    window.location.href = route('riwayat.index');
                 },
                 onError: function(result){
                     alert('Pembayaran gagal, silakan coba lagi.');

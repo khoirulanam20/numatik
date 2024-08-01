@@ -13,7 +13,7 @@ class KonserDashboardController extends Controller
     {
         $tickets = ConcertTicket::with('concert')
             ->where('user_id', auth()->id())
-            ->where('status', 'paid')
+            ->where('status', 'settlement')
             ->get();
         
         return Inertia::render('DashboardPages/TiketKonserDashboard', [

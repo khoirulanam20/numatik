@@ -19,7 +19,7 @@ class RiwayatController extends Controller
         $konserInputs = $user->konserInputs;
         $ulangTahuns = $user->ulangTahuns;
         $pernikahans = $user->pernikahans;
-        $concertTickets = ConcertTicket::where('user_id', $user->id)->where('status', 'paid')->with('concert')->get();
+        $concertTickets = ConcertTicket::where('user_id', $user->id)->with('concert')->get();
 
         return Inertia::render('Riwayat', [
             'auth' => [
