@@ -19,6 +19,14 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
         id_user: auth?.user?.id || '', 
     });
 
+    useEffect(() => {
+        console.log('auth in useEffect:', auth);
+        console.log('auth.user in useEffect:', auth?.user);
+        if (!auth.user) {
+            alert('Silakan login terlebih dahulu untuk mengakses halaman ini.');
+            window.location.href = route('login');
+        }
+    }, [auth.user]);
 
     const handleEdit = (item, type) => {
         setEditingItem({ ...item, type });
@@ -117,7 +125,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                     ticket.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                 }`}>
-                                    {ticket.status === 'paid' ? 'Terbayarkan' : 'Menunggu Pembayaran'}
+                                    {ticket.status === 'paid' ? 'Selesai' : 'Menunggu Pembayaran'}
                                 </span>
                             </td>
                             <td className="px-6 py-4">
@@ -142,8 +150,8 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
     return (
         <>
             <Head title="Riwayat" />
-            <div className="min-h-screen flex flex-col  bg-gradient-to-b dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50">
-            <CustomNavbar user={auth.user} />
+            <div className="min-h-screen flex flex-col bg-gradient-to-b dark:from-blue-800 dark:to-gray-900 from-blue-400 to-gray-50">
+                <CustomNavbar user={auth.user} />
                 <main className="flex-grow container mx-auto px-4 py-8">
                     <div className="max-w-7xl mx-auto">
                         <h1 className="text-4xl font-bold mb-2 text-left text-gray-800 dark:text-white">Riwayat Pesanan</h1>
