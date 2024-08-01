@@ -72,7 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/layanan-dashboard', [LayananDashboardController::class, 'index'])->name('layanan.dashboard');
     Route::get('/dashboard/layanan', [LayananDashboardController::class, 'index'])->middleware(['auth', 'verified', 'role:admin'])->name('dashboard.layanan');
     Route::get('/dashboard/tiket-konser', [TiketKonserDashboardController::class, 'index'])->name('dashboard.tiket-konser');
-    Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+    Route::put('/api/tickets/{ticketId}/update-status', [TiketKonserDashboardController::class, 'updateStatus']);
 });
 
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback']);

@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Pernikahan;
 use App\Models\UlangTahun;
 use App\Models\KonserInput;
+use App\Models\Ticket; // Added this line to import the Ticket model
 
 class LayananDashboardController extends Controller
 {
@@ -42,17 +43,19 @@ class LayananDashboardController extends Controller
         }
     }
 
-    private function getModelByType($type)
+    protected function getModelByType($type)
     {
         switch ($type) {
             case 'pernikahans':
-                return Pernikahan::class;
+                return new Pernikahan();
             case 'ulangTahuns':
-                return UlangTahun::class;
+                return new UlangTahun();
             case 'konserInputs':
-                return KonserInput::class;
+                return new KonserInput();
+            case 'tickets':
+                return new \App\Models\ConcertTicket(); // Fixed the namespace for Ticket model
             default:
-                throw new \Exception("Invalid type");
+                throw new \InvalidArgumentException("Invalid type: {$type}");
         }
     }
 }

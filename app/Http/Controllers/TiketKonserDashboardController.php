@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\ConcertTicket;
 use Inertia\Inertia;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class TiketKonserDashboardController extends Controller
 {
@@ -14,7 +16,6 @@ class TiketKonserDashboardController extends Controller
     {
         $tickets = ConcertTicket::with('concert')
             ->where('user_id', auth()->id())
-            ->where('status', 'settlement')
             ->get();
         
         return Inertia::render('DashboardPages/TiketKonserDashboard', [
@@ -27,19 +28,32 @@ class TiketKonserDashboardController extends Controller
         return User::all();
     }
 
-    public function updateStatus(Request $request)
+    public function updateStatus(Request $request, $ticketId)
     {
         try {
-            $ticket = ConcertTicket::where('order_id', $request->order_id)->firstOrFail();
+            Log::info('Received update status request', ['ticket_id' => $ticketId, 'status' => $request->status]);
+
+            // Validasi data yang diterima
+            $request->validate([
+                'status' => ['required', Rule::in(['settlement', 'pending'])],
+            ]);
+
+            Log::info('Validation passed');
+
+            // Cari tiket berdasarkan ID
+            $ticket = ConcertTicket::findOrFail($ticketId);
+            Log::info('Ticket found', ['ticket' => $ticket]);
+
+            // Perbarui status tiket
             $ticket->status = $request->status;
             $ticket->save();
 
-            \Illuminate\Support\Facades\Log::info('Status updated successfully', ['order_id' => $request->order_id, 'status' => $request->status]);
+            Log::info('Status updated successfully', ['ticket_id' => $ticketId, 'status' => $request->status]);
 
             return response()->json(['message' => 'Status berhasil diperbarui']);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error updating status: ' . $e->getMessage());
-            return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status'], 500);
+            Log::error('Error updating status: ' . $e->getMessage(), ['ticket_id' => $ticketId, 'trace' => $e->getTraceAsString()]);
+            return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status: ' . $e->getMessage()], 500);
         }
     }
 }

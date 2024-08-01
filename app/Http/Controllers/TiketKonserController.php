@@ -23,9 +23,17 @@ class TiketKonserController extends Controller
         $user = auth()->user();
         $concert = Concert::findOrFail($concertId);
 
+        // Buat tiket terlebih dahulu
+        $ticket = ConcertTicket::create([
+            'user_id' => $user->id,
+            'concert_id' => $concert->id,
+            'status' => 'pending',
+            'purchase_date' => now(),
+        ]);
+
         // Proses pembayaran dengan Midtrans
         $paymentController = new PaymentController();
-        $result = $paymentController->process($request, $concertId);
+        $result = $paymentController->process($request, $ticket->id);
 
         return $result;
     }

@@ -27,6 +27,19 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
             alert('Silakan login terlebih dahulu untuk mengakses halaman ini.');
             window.location.href = route('login');
         }
+
+        // Inisialisasi Midtrans Snap
+        const midtransScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+        const myMidtransClientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
+
+        let scriptTag = document.createElement('script');
+        scriptTag.src = midtransScriptUrl;
+        scriptTag.setAttribute('data-client-key', myMidtransClientKey);
+        document.body.appendChild(scriptTag);
+
+        return () => {
+            document.body.removeChild(scriptTag);
+        };
     }, [auth.user]);
 
     const handleEdit = (item, type) => {
@@ -79,6 +92,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                         alert('Pembayaran tertunda, silakan selesaikan pembayaran Anda.');
                     },
                     onError: function(result) {
+                        console.error('Payment error:', result);
                         alert('Pembayaran gagal, silakan coba lagi.');
                     },
                     onClose: function() {
@@ -90,7 +104,11 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
             }
         } catch (error) {
             console.error('Error processing payment:', error);
-            alert('Terjadi kesalahan dalam memproses pembayaran.');
+            let errorMessage = 'Terjadi kesalahan dalam memproses pembayaran.';
+            if (error.response && error.response.data && error.response.data.error) {
+                errorMessage += ' ' + error.response.data.error;
+            }
+            alert(errorMessage);
         }
     };
 
@@ -160,7 +178,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                     ticket.status === 'settlement' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                                 }`}>
-                                    {ticket.status === 'settlement' ? 'Selesai' : 'Menunggu Pembayaran'}
+                                    {ticket.status === 'settlement' ? 'Terbayar' : 'Menunggu Pembayaran'}
                                 </span>
                             </td>
                             <td className="px-6 py-4">

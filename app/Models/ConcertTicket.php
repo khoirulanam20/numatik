@@ -10,11 +10,10 @@ class ConcertTicket extends Model
     use HasFactory;
 
     protected $fillable = [
+        'status',
         'user_id',
         'concert_id',
-        'status',
-        'purchase_date',
-        'order_id'
+        'purchase_date'
     ];
 
     public function user()

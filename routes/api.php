@@ -35,5 +35,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/konser-inputs/{id}', [KonserInputController::class, 'destroy']);
     Route::put('{type}/{id}/update-status', [LayananDashboardController::class, 'updateStatus']);
     Route::get('/users', [UserController::class, 'index']);
-    Route::post('/update-status', [TiketKonserDashboardController::class, 'updateStatus']);
+    Route::put('/tickets/{id}/update-status', [LayananDashboardController::class, 'updateStatus']);
 });

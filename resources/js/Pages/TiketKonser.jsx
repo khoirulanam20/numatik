@@ -35,7 +35,7 @@ export default function TiketKonser({ auth, concerts = [] }) {
         setIsLoading(true);
         setSelectedConcert(concert);
         try {
-            const response = await axios.post(route('payment.process', concert.id));
+            const response = await axios.post(route('tiket.buy', concert.id));
             if (response.data.snap_token) {
                 setSnapToken(response.data.snap_token);
                 setShowModal(true);
