@@ -20,7 +20,6 @@ export default function LayananDashboard({
     const [activeTab, setActiveTab] = useState('pernikahan');
 
     useEffect(() => {
-        // Initialize selectedItems with the status from the server
         const initialSelectedItems = {
             pernikahans: pernikahans.reduce((acc, item) => {
                 acc[item.id] = item.status;
@@ -62,9 +61,9 @@ export default function LayananDashboard({
                 await axios.delete(`/api/${type}/${id}`);
                 if (type === "pernikahans") {
                     setPernikahanData(pernikahanData.filter((item) => item.id !== id));
-                } else if (type === "ulang-tahuns") {
+                } else if (type === "ulangTahuns") {
                     setUlangTahunData(ulangTahunData.filter((item) => item.id !== id));
-                } else if (type === "konser-inputs") {
+                } else if (type === "konserInputs") {
                     setKonserData(konserData.filter((item) => item.id !== id));
                 }
             } catch (error) {
@@ -263,13 +262,6 @@ export default function LayananDashboard({
                             {activeTab === 'pernikahan' && renderTable(pernikahanData, 'pernikahans')}
                             {activeTab === 'ulangTahun' && renderTable(ulangTahunData, 'ulangTahuns')}
                             {activeTab === 'konser' && renderTable(konserData, 'konserInputs')}
-
-                            {/* Hapus atau komentari baris berikut jika tidak digunakan */}
-                            {/* <Pagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={handlePageChange}
-                            /> */}
                         </div>
                     </div>
                 </div>

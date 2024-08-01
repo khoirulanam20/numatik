@@ -72,7 +72,7 @@ export default function Dashboard({ auth }) {
             for (let key in data) {
                 formData.append(key, data[key]);
             }
-            formData.append('id_user', auth.user.id); // Tambahkan id_user ke formData
+            formData.append('id_user', auth.user.id);
             const response = await axios.post('/concerts', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

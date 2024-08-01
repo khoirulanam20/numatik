@@ -14,6 +14,7 @@ class ConcertTicket extends Model
         'concert_id',
         'status',
         'purchase_date',
+        'order_id'
     ];
 
     public function user()
