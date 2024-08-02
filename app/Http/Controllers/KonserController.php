@@ -35,4 +35,6 @@ class KonserController extends Controller
 
         return response()->json(['message' => 'Konser berhasil dihapus']);
     }
+
+
 }

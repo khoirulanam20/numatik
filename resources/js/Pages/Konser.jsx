@@ -56,9 +56,9 @@ export default function Konser({ auth }) {
                             {/* Kolom Kiri - Card Paket Konser */}
                             <div className="w-full lg:w-1/2">
                                 {[
-                                    { title: "Paket Rock", description: "Nikmati penampilan band rock terbaik dalam satu malam yang epik!", price: "Rp 750.000" },
-                                    { title: "Paket Jazz", description: "Rasakan alunan jazz yang menenangkan dari musisi terkenal.", price: "Rp 650.000" },
-                                    { title: "Paket Pop", description: "Saksikan penyanyi pop favorit Anda dalam Konser yang meriah!", price: "Rp 850.000" }
+                                    { title: "Paket 1", description: "Nikmati penampilan band rock terbaik dalam satu malam yang epik!", price: "Rp 750.000" },
+                                    { title: "Paket 2", description: "Rasakan alunan jazz yang menenangkan dari musisi terkenal.", price: "Rp 650.000" },
+                                    { title: "Paket 3", description: "Saksikan penyanyi pop favorit Anda dalam Konser yang meriah!", price: "Rp 850.000" }
                                 ].map((paket, index) => (
                                     <div key={index} className="mb-6 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                                         <h2 className="mb-2 text-2xl font-bold text-gray-800 dark:text-white">{paket.title}</h2>
@@ -120,9 +120,9 @@ export default function Konser({ auth }) {
                                             required
                                         >
                                             <option value="">Pilih Paket</option>
-                                            <option value="paket1">Paket Rock</option>
-                                            <option value="paket2">Paket Jazz</option>
-                                            <option value="paket3">Paket Pop</option>
+                                            <option value="paket 1">Paket 1</option>
+                                            <option value="paket 2">Paket 2</option>
+                                            <option value="paket 3">Paket 3</option>
                                         </select>
                                         {errors.paket && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.paket}</p>}
                                     </div>

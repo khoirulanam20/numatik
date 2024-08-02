@@ -55,4 +55,9 @@ class PernikahanController extends Controller
         $pernikahan->delete();
         return response()->json(['message' => 'Pernikahan berhasil dihapus']);
     }
+
+    public function getUserPernikahans($userId)
+    {
+        return Pernikahan::where('id_user', $userId)->get();
+    }
 }

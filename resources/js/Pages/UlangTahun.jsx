@@ -56,9 +56,9 @@ export default function UlangTahun({ auth }) {
                             {/* Kolom Kiri - Card Paket Ulang Tahun */}
                             <div className="w-full lg:w-1/2 space-y-6">
                                 {[
-                                    { title: "Paket Meriah", description: "Pesta ulang tahun meriah dengan dekorasi, kue, dan hiburan untuk 50 tamu.", price: "Rp 5.000.000" },
-                                    { title: "Paket Keluarga", description: "Perayaan hangat dengan dekorasi dan kue untuk 30 tamu.", price: "Rp 3.500.000" },
-                                    { title: "Paket Intim", description: "Perayaan sederhana namun berkesan untuk 20 tamu.", price: "Rp 2.500.000" }
+                                    { title: "Paket 1", description: "Pesta ulang tahun meriah dengan dekorasi, kue, dan hiburan untuk 50 tamu.", price: "Rp 5.000.000" },
+                                    { title: "Paket 2", description: "Perayaan hangat dengan dekorasi dan kue untuk 30 tamu.", price: "Rp 3.500.000" },
+                                    { title: "Paket 3", description: "Perayaan sederhana namun berkesan untuk 20 tamu.", price: "Rp 2.500.000" }
                                 ].map((paket, index) => (
                                     <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                                         <div className="p-6">
@@ -122,9 +122,9 @@ export default function UlangTahun({ auth }) {
                                             required
                                         >
                                             <option value="">Pilih Paket</option>
-                                            <option value="Paket Meriah">Paket Meriah</option>
-                                            <option value="Paket Keluarga">Paket Keluarga</option>
-                                            <option value="Paket Intim">Paket Intim</option>
+                                            <option value="Paket 1">Paket 1</option>
+                                            <option value="Paket 2">Paket 2</option>
+                                            <option value="Paket 3">Paket 3</option>
                                         </select>
                                         {errors.paket && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.paket}</p>}
                                     </div>

@@ -5,8 +5,7 @@ import CustomFooter from '@/Components/Footer';
 import axios from 'axios';
 
 export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, concertTickets }) {
-    console.log('auth:', auth);
-    console.log('auth.user:', auth?.user);
+    console.log('Data yang diterima:', { konserInputs, ulangTahuns, pernikahans, concertTickets });
 
     const [editingItem, setEditingItem] = useState(null);
     const { data, setData, put, delete: destroy, processing, errors } = useForm({
@@ -20,12 +19,18 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
         id_user: auth?.user?.id || '', 
     });
 
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
     useEffect(() => {
         console.log('auth in useEffect:', auth);
         console.log('auth.user in useEffect:', auth?.user);
         if (!auth.user) {
-            alert('Silakan login terlebih dahulu untuk mengakses halaman ini.');
-            window.location.href = route('login');
+            setAlertMessage('Silakan login terlebih dahulu untuk mengakses halaman ini.');
+            setShowAlert(true);
+            setTimeout(() => {
+                window.location.href = route('login');
+            }, 3000);
         }
 
         // Inisialisasi Midtrans Snap
@@ -61,9 +66,12 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
             preserveScroll: true,
             onSuccess: () => {
                 setEditingItem(null);
+                setAlertMessage('Data berhasil diperbarui.');
+                setShowAlert(true);
             },
             onError: () => {
-                alert('Terjadi kesalahan saat menyimpan data.');
+                setAlertMessage('Terjadi kesalahan saat menyimpan data.');
+                setShowAlert(true);
             }
         });
     };
@@ -72,8 +80,13 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
         if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
             destroy(route(`riwayat.destroy${type}`, item.id), {
                 preserveScroll: true,
+                onSuccess: () => {
+                    setAlertMessage('Item berhasil dihapus.');
+                    setShowAlert(true);
+                },
                 onError: () => {
-                    alert('Terjadi kesalahan saat menghapus data.');
+                    setAlertMessage('Terjadi kesalahan saat menghapus data.');
+                    setShowAlert(true);
                 }
             });
         }
@@ -104,11 +117,7 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
             }
         } catch (error) {
             console.error('Error processing payment:', error);
-            let errorMessage = 'Terjadi kesalahan dalam memproses pembayaran.';
-            if (error.response && error.response.data && error.response.data.error) {
-                errorMessage += ' ' + error.response.data.error;
-            }
-            alert(errorMessage);
+            alert('Kode pembayaran expired, silahkan lakukan pembelian ulang.');
         }
     };
 
@@ -126,27 +135,33 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                     </tr>
                 </thead>
                 <tbody>
-                    {items && items.map((item) => (
-                        <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {item.nama_acara}
-                            </th>
-                            <td className="px-6 py-4">{item.lokasi}</td>
-                            <td className="px-6 py-4">{item.tanggal}</td>
-                            <td className="px-6 py-4">{item.paket}</td>
-                            <td className="px-6 py-4">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                item.status === 1 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                            }`}>
-                                {item.status === 1 ? 'Selesai' : 'Diproses'}
-                            </span>
-                        </td>
-                            <td className="px-6 py-4 space-x-2">
-                                <button onClick={() => handleEdit(item, type)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-                                <button onClick={() => handleDelete(item, type)} className="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
+                    {items && items.length > 0 ? (
+                        items.map((item) => (
+                            <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {item.nama_acara}
+                                </th>
+                                <td className="px-6 py-4">{item.lokasi}</td>
+                                <td className="px-6 py-4">{item.tanggal}</td>
+                                <td className="px-6 py-4">{item.paket}</td>
+                                <td className="px-6 py-4">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    item.status === 1 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                    {item.status === 1 ? 'Selesai' : 'Diproses'}
+                                </span>
                             </td>
+                                <td className="px-6 py-4 space-x-2">
+                                    <button onClick={() => handleEdit(item, type)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                                    <button onClick={() => handleDelete(item, type)} className="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="6" className="px-6 py-4 text-center">Tidak ada data tersedia</td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>
@@ -214,6 +229,26 @@ export default function Riwayat({ auth, konserInputs, ulangTahuns, pernikahans, 
                 <CustomNavbar user={auth.user} />
                 <main className="flex-grow container mx-auto px-4 py-8">
                     <div className="max-w-7xl mx-auto">
+                        {showAlert && (
+                            <div id="alert-additional-content-1" className="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                                <div className="flex items-center">
+                                    <svg className="flex-shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                    </svg>
+                                    <span className="sr-only">Info</span>
+                                    <h3 className="text-lg font-medium">Pemberitahuan</h3>
+                                </div>
+                                <div className="mt-2 mb-4 text-sm">
+                                    {alertMessage}
+                                </div>
+                                <div className="flex">
+                                    <button type="button" className="text-blue-800 bg-transparent border border-blue-800 hover:bg-blue-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:hover:bg-blue-600 dark:border-blue-600 dark:text-blue-400 dark:hover:text-white dark:focus:ring-blue-800" onClick={() => setShowAlert(false)} aria-label="Close">
+                                        Tutup
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         <h1 className="text-4xl font-bold mb-2 text-left text-gray-800 dark:text-white">Riwayat Pesanan</h1>
                         
                         <div className="space-y-8">

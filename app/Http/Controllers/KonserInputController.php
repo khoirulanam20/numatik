@@ -54,4 +54,9 @@ class KonserInputController extends Controller
         $konserInput->delete();
         return redirect()->back()->with('success', 'Data konser berhasil dihapus.');
     }
+
+    public function getUserKonserInputs($userId)
+    {
+        return KonserInput::where('id_user', $userId)->get();
+    }
 }

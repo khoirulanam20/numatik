@@ -45,4 +45,9 @@ class UlangTahunController extends Controller
         $ulangTahun->delete();
         return response()->json(['message' => 'Ulang Tahun berhasil dihapus']);
     }
+
+    public function getUserUlangTahuns($userId)
+    {
+        return UlangTahun::where('id_user', $userId)->get();
+    }
 }
